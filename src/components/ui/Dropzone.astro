@@ -1,0 +1,205 @@
+---
+import ImageStack from "./icons/ImageStack.astro";
+import Icon from "./icons/Icon.astro";
+---
+
+<div
+  id="image-upload-container"
+  class="flex aspect-square cursor-pointer flex-col justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-12 shadow-lg transition duration-300"
+>
+  <div id="upload-interface" class="m-auto text-center">
+    <ImageStack />
+    <div
+      class="mt-4 flex flex-wrap justify-center text-sm leading-6 text-slate-600"
+    >
+      <span class="pe-1 text-lg font-medium text-slate-800">
+        Drop your file here or
+      </span>
+      <span
+        id="browse-button"
+        class="rounded-lg text-lg font-semibold text-blue-600 decoration-2 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 hover:text-blue-700 hover:underline"
+      >
+        browse
+      </span>
+    </div>
+
+    <p class="mt-1 text-sm text-slate-400">
+      Pick an image in JPG, PNG, or WEBP format.
+    </p>
+
+    <input type="file" id="file-input" class="hidden" accept="image/*" />
+  </div>
+
+  <div
+    id="progress"
+    class="hidden items-center justify-center font-medium text-slate-800"
+  >
+    <svg
+      class="-ml-1 mr-3 h-5 w-5 animate-spin"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"></circle>
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      ></path>
+    </svg>
+    Processing...
+  </div>
+
+  <div id="image-preview" class="m-auto hidden">
+    <!-- Image preview and editing controls will go here -->
+  </div>
+  <div id="controls" class="mt-4 hidden gap-x-5">
+    <button
+      id="start-over-button"
+      class="group flex items-center gap-x-3 rounded-lg bg-slate-200 px-4 py-2 font-medium text-slate-900 transition duration-300 hover:bg-slate-300"
+      >Replace <Icon name="photo" /></button
+    >
+    <button
+      id="refresh-button"
+      class="group flex items-center gap-3 rounded-lg bg-slate-400 px-4 py-2 font-medium text-slate-50 transition duration-300 hover:bg-slate-500"
+      >Reset <Icon name="reset" /></button
+    >
+    <button
+      id="refresh-button"
+      class="group ml-auto flex items-center gap-3 rounded-lg bg-sky-500 px-4 py-2 font-medium text-sky-50 transition duration-300 hover:bg-sky-600"
+      >Download <Icon name="download" /></button
+    >
+  </div>
+</div>
+
+<style>
+  :global(.uploaded-image) {
+    border-radius: 9999px;
+    height: 400px;
+    width: 400px;
+    object-fit: cover;
+  }
+  .dragging {
+    @apply bg-slate-100;
+  }
+
+  /* #image-preview {
+  width: 400px;
+  height: 400px;
+} */
+</style>
+<script is:inline>
+  const container = document.getElementById("image-upload-container");
+  const fileInput = document.getElementById("file-input");
+  const browseButton = document.getElementById("browse-button");
+  const uploadInterface = document.getElementById("upload-interface");
+  const imagePreview = document.getElementById("image-preview");
+  const progress = document.getElementById("progress");
+  const controls = document.getElementById("controls");
+  const refreshButton = document.getElementById("refresh-button");
+  const startOverButton = document.getElementById("start-over-button");
+
+  // Show file dialog when clicking 'browse'
+  browseButton.addEventListener("click", () => fileInput.click());
+
+  // Handle file selection
+  fileInput.addEventListener("change", handleFileUpload);
+
+  // Handle file drag-and-drop
+  container.addEventListener("dragenter", () => {
+    container.classList.add("dragging");
+  });
+
+  container.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    container.classList.add("dragging");
+  });
+
+  container.addEventListener("dragleave", () => {
+    container.classList.remove("dragging");
+  });
+
+  container.addEventListener("drop", (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    handleFileUpload({ target: { files: [file] } });
+    container.classList.remove("dragging");
+  });
+
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    const img = imagePreview.querySelector("img");
+    if (img) {
+      return;
+    }
+
+    if (!file || !file.type.startsWith("image/")) {
+      alert("Please upload a valid image file.");
+      return;
+    }
+
+    // Show the progress spinner
+    progress.classList.add("flex");
+    progress.classList.remove("hidden");
+    uploadInterface.classList.add("hidden");
+    controls.classList.remove("flex");
+    controls.classList.add("hidden");
+    displayImagePreview(file);
+  }
+
+  // Display uploaded image and editing controls
+  function displayImagePreview(file) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      img.classList.add("uploaded-image");
+
+      img.onload = function () {
+        progress.classList.add("hidden");
+        imagePreview.innerHTML = "";
+        imagePreview.appendChild(img);
+        imagePreview.classList.remove("hidden");
+        uploadInterface.classList.add("hidden");
+        container.classList.remove("border-dashed");
+        container.classList.remove("border-slate-300");
+        container.classList.add("border-solid");
+        container.classList.add("border-slate-100");
+        controls.classList.remove("hidden");
+        controls.classList.add("flex");
+      };
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  // Reset changes to the image
+  refreshButton.addEventListener("click", () => {
+    const img = imagePreview.querySelector("img");
+    if (img) {
+      img.style.transform = "none";
+    }
+  });
+
+  // Start over and reset to initial state
+  startOverButton.addEventListener("click", () => {
+    imagePreview.classList.add("hidden");
+    uploadInterface.classList.remove("hidden");
+    controls.classList.add("hidden");
+    fileInput.value = "";
+    imagePreview.innerHTML = "";
+    const progress = document.getElementById("progress");
+    progress.classList.add("hidden");
+    container.classList.remove("border-solid");
+    container.classList.remove("border-slate-100");
+    container.classList.add("border-dashed");
+    container.classList.add("border-slate-300");
+  });
+</script>
