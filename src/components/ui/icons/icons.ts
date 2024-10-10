@@ -66,6 +66,22 @@ export const Icons = {
     width: 24,
     fill: "none",
     viewBox: "0 0 24 24",
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    stroke: "currentColor",
+  },
+  arrowUp: {
+    paths: [
+      {
+        d: "M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18",
+      },
+    ],
+    class: "size-5",
+    height: 24,
+    width: 24,
+    fill: "none",
+    viewBox: "0 0 24 24",
     strokeWidth: "2",
     strokeLinecap: "round",
     strokeLinejoin: "round",

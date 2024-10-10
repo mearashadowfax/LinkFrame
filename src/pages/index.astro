@@ -2,7 +2,8 @@
 import Hero from "../components/common/Hero.astro";
 import Dropzone from "../components/ui/Dropzone.astro";
 import Editor from "../components/common/Editor.astro";
-import '@/styles/globals.css'
+import "@/styles/globals.css";
+import Icon from "@/components/ui/icons/Icon.astro";
 ---
 
 <html lang="en">
@@ -11,10 +12,48 @@ import '@/styles/globals.css'
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
+    <title>Banners.li</title>
   </head>
   <body class="antialiased">
     <Hero />
     <Editor />
+    <button
+      id="btnToTop"
+      class="fixed sm:hidden bottom-7 left-3 border-none outline-none p-3 rounded-full bg-sky-200 text-white"
+    >
+      <Icon name="arrowUp" />
+    </button>
+
+    <script>
+      const btnToTop = document.getElementById(
+        "btnToTop"
+      ) as HTMLButtonElement | null;
+
+      const isMobile: boolean = window.innerWidth < 600;
+
+      if (isMobile && btnToTop) {
+        window.onscroll = () => scrollFunction();
+      }
+
+      function scrollFunction() {
+        if (!btnToTop) return;
+
+        if (
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+        ) {
+          btnToTop.style.display = "block";
+        } else {
+          btnToTop.style.display = "none";
+        }
+      }
+
+      btnToTop?.addEventListener("click", () => topFunction());
+
+      function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      }
+    </script>
   </body>
 </html>

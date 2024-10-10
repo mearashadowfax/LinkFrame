@@ -6,14 +6,14 @@ import Icon from "../ui/icons/Icon.astro";
 <div class="relative bg-gradient-to-tl from-blue-100 via-transparent">
   <div class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
     <div class="grid items-start gap-8 md:grid-cols-2 lg:gap-12">
-      <div>
+      <div class="mx-auto sm:mx-0 order-last sm:order-first">
         <div class="max-w-xs p-4">
           <div class="flex items-center justify-between">
             <p class="text-lg font-medium text-slate-800">Rotate</p>
             <input
               id="rotateValue"
               type="number"
-              class="border-light min-w-10 justify-center rounded-lg border border-slate-200 p-1 text-center text-sm font-normal outline-none"
+              class="border-light min-w-10 justify-center rounded-lg border border-slate-200 p-1 text-center text-sm font-normal outline-none focus:border-sky-500 focus:ring-sky-500"
               value="0"
               min="-180"
               max="180"
@@ -37,7 +37,7 @@ import Icon from "../ui/icons/Icon.astro";
             <input
               id="scaleValue"
               type="number"
-              class="border-light min-w-10 justify-center rounded-lg border border-slate-200 p-1 text-center text-sm font-normal outline-none"
+              class="border-light min-w-10 justify-center rounded-lg border border-slate-200 p-1 text-center text-sm font-normal outline-none focus:border-sky-500 focus:ring-sky-500"
               value="1"
               min="0.1"
               max="1.9"
@@ -72,17 +72,17 @@ import Icon from "../ui/icons/Icon.astro";
               </span>
             </p>
           </div>
-          <div class="relative mt-5 h-8 overflow-hidden md:inset-0">
+          <div class="relative mt-5 h-[3.25rem]">
             <input
               id="hexInput1"
               type="text"
               placeholder=""
-              class="hexInput h-full w-full border-none pl-10 font-medium text-slate-700 outline-none"
+              class="hexInput h-full w-full border-slate-200 rounded-lg pl-14 font-medium text-slate-700 focus:border-sky-500 focus:ring-sky-500"
             />
             <input
               id="colorPicker1"
               type="color"
-              class="colorPicker absolute top-1/2 h-7 w-7 -translate-y-1/2 transform cursor-pointer rounded-full border-none"
+              class="colorPicker absolute top-1/2 h-7 w-7 -translate-y-1/2 left-4 transform cursor-pointer rounded-full border-none"
             />
             <button
               id="randomBtn1"
@@ -101,7 +101,7 @@ import Icon from "../ui/icons/Icon.astro";
             <input
               id="startPositionValue"
               type="number"
-              class="border-light min-w-10 justify-center rounded-lg border border-slate-200 p-1 text-center text-sm font-normal outline-none"
+              class="border-light min-w-10 justify-center rounded-lg border border-slate-200 p-1 text-center text-sm font-normal outline-none focus:border-sky-500 focus:ring-sky-500"
               value="0"
               min="-180"
               max="180"
@@ -125,7 +125,7 @@ import Icon from "../ui/icons/Icon.astro";
             <input
               id="endPositionValue"
               type="number"
-              class="border-light min-w-10 justify-center rounded-lg border border-slate-200 p-1 text-center text-sm font-normal outline-none"
+              class="border-light min-w-10 justify-center rounded-lg border border-slate-200 p-1 text-center text-sm font-normal outline-none focus:border-sky-500 focus:ring-sky-500"
               value="0"
               min="-180"
               max="180"
@@ -152,7 +152,7 @@ import Icon from "../ui/icons/Icon.astro";
           <input
             type="text"
             id="input-badge-text-label"
-            class="block w-full rounded-lg border-slate-200 px-4 py-3 text-base focus:border-blue-500 focus:ring-blue-500"
+            class="block w-full rounded-lg border-slate-200 px-4 py-3 text-base focus:border-sky-500 focus:ring-sky-500"
             placeholder="#LinkedIn"
           />
         </div>
@@ -172,17 +172,17 @@ import Icon from "../ui/icons/Icon.astro";
               </span>
             </p>
           </div>
-          <div class="relative mt-5 h-8 overflow-hidden md:inset-0">
+          <div class="relative mt-5 h-[3.25rem]">
             <input
               id="hexInput2"
               type="text"
               placeholder=""
-              class="hexInput h-full w-full border-none pl-10 font-medium text-slate-700 outline-none"
+              class="hexInput h-full w-full border-slate-200 rounded-lg pl-14 font-medium text-slate-700 focus:border-sky-500 focus:ring-sky-500"
             />
             <input
               id="colorPicker2"
               type="color"
-              class="colorPicker absolute top-1/2 h-7 w-7 -translate-y-1/2 transform cursor-pointer rounded-full border-none"
+              class="colorPicker absolute top-1/2 h-7 w-7 -translate-y-1/2 left-4 transform cursor-pointer rounded-full border-none"
             />
             <button
               id="randomBtn2"
@@ -342,11 +342,17 @@ import Icon from "../ui/icons/Icon.astro";
 </div>
 
 <style>
+  @media (min-width: 640px) {
   .sticky-column {
     position: -webkit-sticky;
     position: sticky;
     top: 15%;
     align-self: start;
+  }
+  }
+
+  :global(.colorpick-eyedropper-input-trigger) {
+    visibility: hidden;
   }
 
   .colorPicker {

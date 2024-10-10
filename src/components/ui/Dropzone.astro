@@ -59,20 +59,20 @@ import Icon from "./icons/Icon.astro";
   <div id="image-preview" class="m-auto hidden">
     <!-- Image preview and editing controls will go here -->
   </div>
-  <div id="controls" class="mt-4 hidden gap-x-5">
+  <div id="controls" class="mt-6 sm:mt-4 hidden gap-x-5 flex-col gap-y-2 sm:flex-row">
     <button
       id="start-over-button"
-      class="group flex items-center gap-x-3 rounded-lg bg-slate-200 px-4 py-2 font-medium text-slate-900 transition duration-300 hover:bg-slate-300"
+      class="group max-w-fit flex items-center gap-x-3 rounded-lg bg-slate-200 px-4 py-2 font-medium text-slate-900 transition duration-300 hover:bg-slate-300"
       >Replace <Icon name="photo" /></button
     >
     <button
-      id="refresh-button"
-      class="group flex items-center gap-3 rounded-lg bg-slate-400 px-4 py-2 font-medium text-slate-50 transition duration-300 hover:bg-slate-500"
+      id="reset-button"
+      class="group max-w-fit flex items-center gap-3 rounded-lg bg-slate-400 px-4 py-2 font-medium text-slate-50 transition duration-300 hover:bg-slate-500"
       >Reset <Icon name="reset" /></button
     >
     <button
-      id="refresh-button"
-      class="group ml-auto flex items-center gap-3 rounded-lg bg-sky-500 px-4 py-2 font-medium text-sky-50 transition duration-300 hover:bg-sky-600"
+      id="download-button"
+      class="group max-w-fit sm:ml-auto flex items-center gap-3 rounded-lg bg-sky-500 px-4 py-2 font-medium text-sky-50 transition duration-300 hover:bg-sky-600"
       >Download <Icon name="download" /></button
     >
   </div>
@@ -89,10 +89,14 @@ import Icon from "./icons/Icon.astro";
     @apply bg-slate-100;
   }
 
-  /* #image-preview {
-  width: 400px;
-  height: 400px;
-} */
+  @media (max-width: 640px) 
+  { :global(.uploaded-image) {
+    border-radius: 9999px;
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+  }
+  }
 </style>
 <script is:inline>
   const container = document.getElementById("image-upload-container");
@@ -102,7 +106,7 @@ import Icon from "./icons/Icon.astro";
   const imagePreview = document.getElementById("image-preview");
   const progress = document.getElementById("progress");
   const controls = document.getElementById("controls");
-  const refreshButton = document.getElementById("refresh-button");
+  const resetButton = document.getElementById("reset-button");
   const startOverButton = document.getElementById("start-over-button");
 
   // Show file dialog when clicking 'browse'
@@ -181,7 +185,7 @@ import Icon from "./icons/Icon.astro";
   }
 
   // Reset changes to the image
-  refreshButton.addEventListener("click", () => {
+  resetButton.addEventListener("click", () => {
     const img = imagePreview.querySelector("img");
     if (img) {
       img.style.transform = "none";
