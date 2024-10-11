@@ -209,7 +209,7 @@ import Icon from "../ui/icons/Icon.astro";
                   type="number"
                   aria-roledescription="Number field"
                   value="36"
-                  data-hs-input-number-input=""
+                  data-hs-input-font-size-input=""
                 />
               </div>
               <div
@@ -219,7 +219,7 @@ import Icon from "../ui/icons/Icon.astro";
                   type="button"
                   class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-medium last:rounded-e-lg bg-white text-slate-800 hover:bg-slate-50 focus:outline-none focus:bg-slate-50"
                   aria-label="Decrease"
-                  data-hs-input-number-decrement=""
+                  data-hs-input-font-size-decrement=""
                 >
                   <svg
                     class="shrink-0 size-3.5"
@@ -240,7 +240,7 @@ import Icon from "../ui/icons/Icon.astro";
                   type="button"
                   class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-medium last:rounded-e-lg bg-white text-slate-800 hover:bg-slate-50 focus:outline-none focus:bg-slate-50"
                   aria-label="Increase"
-                  data-hs-input-number-increment=""
+                  data-hs-input-font-size-increment=""
                 >
                   <svg
                     class="shrink-0 size-3.5"
@@ -450,36 +450,72 @@ import Icon from "../ui/icons/Icon.astro";
 </script>
 
 <script is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
   const letterSpacingValues = [-0.05, -0.025, 0, 0.025, 0.05, 0.1];
-  let currentIndex = 2;
+  let currentIndexLetterSpacing = 2;
 
-  const inputElement = document.querySelector("[data-hs-input-letter-spacing]");
-  const decreaseButton = document.querySelector(
+  const inputElementLetterSpacing = document.querySelector("[data-hs-input-letter-spacing]");
+  const decreaseButtonLetterSpacing = document.querySelector(
     "[data-hs-input-letter-spacing-decrement]"
   );
-  const increaseButton = document.querySelector(
+  const increaseButtonLetterSpacing = document.querySelector(
     "[data-hs-input-letter-spacing-increment]"
   );
 
-  inputElement.value = letterSpacingValues[currentIndex];
+  inputElementLetterSpacing.value = letterSpacingValues[currentIndexLetterSpacing];
 
-  increaseButton.addEventListener("click", () => {
-    if (currentIndex < letterSpacingValues.length - 1) {
-      currentIndex++;
+  increaseButtonLetterSpacing.addEventListener("click", () => {
+    if (currentIndexLetterSpacing < letterSpacingValues.length - 1) {
+      currentIndexLetterSpacing++;
       updateLetterSpacing();
     }
   });
 
-  decreaseButton.addEventListener("click", () => {
-    if (currentIndex > 0) {
-      currentIndex--;
+  decreaseButtonLetterSpacing.addEventListener("click", () => {
+    if (currentIndexLetterSpacing > 0) {
+      currentIndexLetterSpacing--;
       updateLetterSpacing();
     }
   });
 
   function updateLetterSpacing() {
-    const value = letterSpacingValues[currentIndex];
-    inputElement.value = value;
-    console.log(`Current letter spacing: ${value}em`);
+    const valueLetterSpacing = letterSpacingValues[currentIndexLetterSpacing];
+    inputElementLetterSpacing.value = valueLetterSpacing;
+    console.log(`Current letter spacing: ${valueLetterSpacing}em`);
   }
+
+
+  const fontSizeValues = [16, 20, 24, 32, 36, 40, 48];
+  let currentFontSizeIndex = 3;
+
+  const inputElementFontSize = document.querySelector("[data-hs-input-font-size-input]");
+  const decreaseButtonFontSize = document.querySelector(
+    "[data-hs-input-font-size-decrement]"
+  );
+  const increaseButtonFontSize = document.querySelector(
+    "[data-hs-input-font-size-increment]"
+  );
+
+  inputElementFontSize.value = fontSizeValues[currentFontSizeIndex];
+
+  increaseButtonFontSize.addEventListener("click", () => {
+    if (currentFontSizeIndex < fontSizeValues.length - 1) {
+      currentFontSizeIndex++;
+      updateFontSize();
+    }
+  });
+
+  decreaseButtonFontSize.addEventListener("click", () => {
+    if (currentFontSizeIndex > 0) {
+      currentFontSizeIndex--;
+      updateFontSize();
+    }
+  });
+
+  function updateFontSize() {
+    const valueFontSize = fontSizeValues[currentFontSizeIndex];
+    inputElementFontSize.value = valueFontSize;
+    console.log(`Current letter spacing: ${valueFontSize}em`);
+  }
+});
 </script>
