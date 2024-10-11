@@ -1,18 +1,26 @@
 ---
-import Hero from "../components/common/Hero.astro";
-import Dropzone from "../components/ui/Dropzone.astro";
-import Editor from "../components/common/Editor.astro";
-import "@/styles/globals.css";
+import Meta from "@components/Meta.astro";
+import Hero from "@components/Hero.astro";
+import Editor from "@components/Editor.astro";
 import Icon from "@/components/ui/icons/Icon.astro";
+import { SITE } from "@data/constants";
+import "@/styles/globals.css";
+
+const { title = SITE.title, meta, structuredData } = Astro.props;
+
+interface Props {
+  title?: string;
+  meta?: string;
+  structuredData?: object;
+  lang?: string;
+}
 ---
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
+    <Meta meta={meta} structuredData={structuredData} />
     <meta name="generator" content={Astro.generator} />
-    <title>Banners.li</title>
+    <title>{title}</title>
   </head>
   <body class="antialiased">
     <Hero />

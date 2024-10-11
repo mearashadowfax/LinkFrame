@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/sitemap": "^3.2.0",
     "@astrojs/tailwind": "^5.1.2",
     "@popperjs/core": "^2.11.8",
     "@preline/tooltip": "^2.5.0",
     "astro": "^4.16.0",
     "preline": "^2.5.0",
+    "sharp-ico": "^0.1.5",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.6.3"
   },
