@@ -29,6 +29,15 @@ const downloadButton = document.getElementById(
   "downloadButton"
 ) as HTMLButtonElement;
 
+
+// Arc parameters
+const startPositionValue = document.getElementById("startPositionValue") as HTMLInputElement;
+const endPositionValue = document.getElementById("endPositionValue") as HTMLInputElement;
+const frameTextInput = document.getElementById("frameTextInput") as HTMLInputElement;
+const fontSizeInput = document.getElementById("fontSizeInput") as HTMLInputElement;
+const hexInput2 = document.getElementById("hexInput2") as HTMLInputElement;
+const hexInput3 = document.getElementById("hexInput3") as HTMLInputElement;
+
 let canvas: HTMLCanvasElement | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
 let image = new Image();
@@ -39,7 +48,7 @@ let offsetY = 0;
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
-let currentCanvasBackgroundColor = "";
+let currentCanvasBackgroundColor = getRandomColor();
 
 // Show file dialog when clicking 'browse'
 browseButton.addEventListener("click", () => imageUpload.click());
@@ -94,10 +103,9 @@ function handleFileUpload(event: Event) {
     enableDragging(canvas);
   }
 
-  
   // Display the image preview once it's loaded
   displayImagePreview(file);
-  imageUpload.value = '';
+  imageUpload.value = "";
 }
 
 // Display image preview
@@ -127,24 +135,61 @@ function displayImagePreview(file: File) {
   reader.readAsDataURL(file);
 }
 
-function drawBanner(): void {
+function rgba(r: number, g: number, b: number, a: number): string {
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
 
-  if (!ctx) {
-    console.error('Failed to get canvas context');
-    return;
-  }
-  if (canvas) {
-  // Clear previous drawing
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function hexToRgb(hex: string) {
+  hex = hex.replace(/^#/, '');
+  const bigint = parseInt(hex, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return { r, g, b };
+}
+
+// Redraw the canvas
+function redrawCanvas() {
+  if (!ctx || !image.complete || image.naturalWidth === 0) return;
+
+  requestAnimationFrame(() => {
+    if (ctx && canvas) {
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Fill canvas background with color if needed
+      ctx.fillStyle = currentCanvasBackgroundColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Apply transformations (rotation and scale)
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.translate(canvas.width / 2 + offsetX, canvas.height / 2 + offsetY);
+      ctx.rotate((rotation * Math.PI) / 180);
+      ctx.scale(scale, scale);
+
+      // Draw the image centered on the canvas
+      ctx.drawImage(image, -image.width / 2, -image.height / 2);
+
+      // Restore the default transformation matrix
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    }
+
+    // Draw the circular arc
+    drawCircularArcAndText();
+  });
+}
+
+function drawCircularArcAndText() {
+  if (!ctx || !canvas) return;
 
   // Create the banner arc
-  const arcWidth = canvas.width / 2 * 0.3; // Adjust this value to change the thickness of the arc
-  const startArcAngle = Math.PI * parseFloat((document.getElementById('startPositionValue') as HTMLInputElement).value) / 6; // 9 o'clock position
-  const endArcAngle = Math.PI * parseFloat((document.getElementById('endPositionValue') as HTMLInputElement).value) / 6; // 4 o'clock position
+  const arcWidth = (canvas.width / 2) * 0.3; // Adjust this value to change the thickness of the arc
+  const startArcAngle = (Math.PI * parseFloat(startPositionValue.value)) / 6; // Adjust start angle based on input
+  const endArcAngle = (Math.PI * parseFloat(endPositionValue.value)) / 6; // Adjust end angle based on input
   const totalArcAngle = startArcAngle - endArcAngle;
-  const steps = 300; // Number of segments to create the gradient effect
-  
+
   ctx.lineWidth = arcWidth;
+  const steps = 300; // Number of segments to create the gradient effect
 
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
@@ -170,37 +215,30 @@ function drawBanner(): void {
       true
     );
 
-    const color = (document.getElementById('hexInput2') as HTMLInputElement).value;
-    ctx.strokeStyle = rgba(hexToRgb(color).r, hexToRgb(color).g, hexToRgb(color).b, opacity);
+    const color = hexInput2.value; // Color from input
+    ctx.strokeStyle = rgba(
+      hexToRgb(color).r,
+      hexToRgb(color).g,
+      hexToRgb(color).b,
+      opacity
+    );
     ctx.stroke();
   }
 
-  // Function to convert hex to RGB
-  function hexToRgb(hex: string): { r: number; g: number; b: number } {
-    const bigint = parseInt(hex.slice(1), 16);
-    return {
-      r: (bigint >> 16) & 255,
-      g: (bigint >> 8) & 255,
-      b: bigint & 255,
-    };
-  }
-
   // Draw the text along the arc
-  const text = (document.getElementById('frameTextInput') as HTMLInputElement).value;
+  const text = frameTextInput.value;
   const textLength = text.length;
   const textRadius = canvas.width / 2 - arcWidth / 2;
   const anglePerChar = Math.PI * 0.1; // Example letter spacing
 
   const totalAngle = anglePerChar * textLength;
 
-  ctx.font = `${(document.getElementById('fontSizeInput') as HTMLInputElement).value}px Arial`;
-  ctx.fillStyle = '#000'; // Text color can be customizable later
+  ctx.font = `${fontSizeInput.value}px Arial`; // Font size from input
+  ctx.fillStyle = "#000"; // Text color can be customizable later
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  const startAngle = Math.PI * 1.61 - (totalAngle / 2); // Center the text
-  const endAngle = Math.PI * 0.95; // End at 6 o'clock
-
+  const startAngle = Math.PI * 1.61 - totalAngle / 2; // Center the text
   ctx.save();
   ctx.translate(canvas.width / 2, canvas.height / 2);
 
@@ -208,44 +246,11 @@ function drawBanner(): void {
     const angle = startAngle - i * anglePerChar;
     ctx.save();
     ctx.rotate(angle);
-    ctx.translate(0, -textRadius);
-    ctx.rotate(Math.PI / 1); // Rotate each character to face outward
-    ctx.fillText(text[i], 0, 0);
+    ctx.fillText(text[i], textRadius, 0); // Draw text at the calculated angle and radius
     ctx.restore();
   }
+  
   ctx.restore();
-}
-}
-
-function rgba(r: number, g: number, b: number, a: number): string {
-  return `rgba(${r}, ${g}, ${b}, ${a})`;
-}
-
-// Redraw the canvas
-function redrawCanvas() {
-  if (!ctx || !image.complete || image.naturalWidth === 0) {
-    console.log("Image is not fully loaded yet.");
-    return;
-  }
-
-  // Clear the canvas
-  ctx.clearRect(0, 0, canvas!.width, canvas!.height);
-
-  // Fill canvas background with color if needed
-  ctx.fillStyle = currentCanvasBackgroundColor;
-  ctx.fillRect(0, 0, canvas!.width, canvas!.height);
-
-  // Apply transformations (rotation and scale)
-  ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform before applying new
-  ctx.translate(canvas!.width / 2 + offsetX, canvas!.height / 2 + offsetY);
-  ctx.rotate((rotation * Math.PI) / 180);
-  ctx.scale(scale, scale);
-
-  // Draw the image centered on the canvas
-  ctx.drawImage(image, -image.width / 2, -image.height / 2);
-
-  // Restore the default transformation matrix
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
 // Enable dragging of the canvas
@@ -298,6 +303,7 @@ scaleValue.addEventListener("input", () => {
   scaleSlider.value = scaleValue.value;
   redrawCanvas();
 });
+
 // Event listener for the rotation slider
 scaleSlider.addEventListener("input", () => {
   scale = parseFloat(scaleSlider.value);
@@ -332,7 +338,7 @@ startOverButton.addEventListener("click", () => {
 downloadButton.addEventListener("click", function () {
   if (!canvas || !ctx) return;
   const link = document.createElement("a");
-  link.href = canvas.toDataURL("image/png")
+  link.href = canvas.toDataURL("image/png");
   link.download = "linkedin-profile-frame.png";
   link.click();
 });
@@ -377,42 +383,41 @@ function setColor(section: ColorSection, color: string) {
   section.colorPicker.value = color;
 
   if (section.isForCanvas) {
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    if (canvas) {
-      setCanvasBackgroundColor(color);
-    }
+    setCanvasBackgroundColor(color);
   }
 }
 
+
 function setCanvasBackgroundColor(color: string) {
-  currentCanvasBackgroundColor = color;
+  if (currentCanvasBackgroundColor !== color) {
+    currentCanvasBackgroundColor = color; // Update only if it's different
 
-  const ctx = canvas?.getContext("2d");
-  if (ctx) {
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, canvas!.width, canvas!.height);
+    const ctx = canvas?.getContext("2d");
+    if (ctx) {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, canvas!.width, canvas!.height); // Set the background
+    }
+
+    redrawCanvas(); // Redraw the canvas to reflect the new background color
   }
-
-  // Redraw the canvas to apply the background color and any transformations
-  redrawCanvas();
 }
 
 function attachEventListenersToSection(section: ColorSection) {
   section.randomBtn.addEventListener("click", () => {
     const randomColor = getRandomColor();
-    setColor(section, randomColor);
+    setColor(section, randomColor); // Set new random color
   });
 
   section.hexInput.addEventListener("input", (e) => {
     const value = (e.target as HTMLInputElement).value;
     if (/^#[0-9A-F]{6}$/i.test(value)) {
-      setColor(section, value);
+      setColor(section, value); // Set color based on hex input
     }
   });
 
   section.colorPicker.addEventListener("input", (e) => {
     const color = (e.target as HTMLInputElement).value;
-    setColor(section, color);
+    setColor(section, color); // Set color based on color picker
   });
 }
 
