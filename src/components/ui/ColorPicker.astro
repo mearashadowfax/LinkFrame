@@ -1,0 +1,53 @@
+---
+import Icon from "@ui/icons/Icon.astro";
+
+const { title, hexInputId, colorPickerId, randomBtnId } = Astro.props;
+
+interface Props {
+  title: string;
+  hexInputId: string;
+  colorPickerId: string;
+  randomBtnId: string;
+}
+
+const info =
+  'Click the "Random" button, enter a hex code, or use the color picker to create a custom color scale.';
+const btnText = "Random";
+---
+
+<div class="max-w-md lg:max-w-xs mx-auto p-4 colorContainer">
+  <div class="hs-tooltip [--trigger:hover] sm:[--placement:right]">
+    <p
+      class="flex items-center gap-x-2 text-lg font-medium leading-tight text-slate-800"
+    >
+      {title}
+      <Icon name="info" />
+      <span
+        class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible invisible absolute z-10 inline-block w-80 rounded-xl bg-slate-200 px-4 py-2 text-base font-medium leading-tight text-slate-700 opacity-0 shadow-sm transition-opacity"
+        role="tooltip"
+      >
+        {info}
+      </span>
+    </p>
+  </div>
+  <div class="relative mt-5 h-[3.25rem]">
+    <input
+      id={hexInputId}
+      type="text"
+      placeholder=""
+      class="hexInput h-full w-full border-slate-200 rounded-lg pl-14 font-medium text-slate-700 focus:border-sky-500 focus:ring-sky-500"
+    />
+    <input
+      id={colorPickerId}
+      type="color"
+      class="colorPicker absolute top-1/2 h-7 w-7 -translate-y-1/2 left-4 transform cursor-pointer rounded-full border-none"
+    />
+    <button
+      id={randomBtnId}
+      class="randomBtn absolute right-2 top-1/2 flex -translate-y-1/2 transform cursor-pointer items-center gap-x-1 rounded-full py-1.5 font-medium text-slate-500"
+    >
+      {btnText}
+      <Icon name="random" />
+    </button>
+  </div>
+</div>

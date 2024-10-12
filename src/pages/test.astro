@@ -1,0 +1,731 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Picture Editor</title>
+  <meta rel="canonical" href="https://profilepicture.app/">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Profile Picture Editor">
+  <meta name="description" content="Profile Picture Editor - Add a LinkedIn-inspired badge to your profile picture. Made by Jason Leow @jasonleowsg">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jasonleow.com/profilephotoeditor">
+  <meta property="og:title" content="Profile Picture Editor">
+  <meta property="og:description" content="Profile Picture Editor - Add a LinkedIn-inspired badge to your profile picture. Made by Jason Leow @jasonleowsg">
+  <meta property="og:image" content="https://i.postimg.cc/QdrhqtzM/profilephotoeditor-ogimage.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://jasonleow.com/profilephotoeditor">
+  <meta property="twitter:title" content="Profile Picture Editor">
+  <meta property="twitter:description" content="Profile Picture Editor - Add a LinkedIn-inspired badge to your profile picture. Made by Jason Leow @jasonleowsg">
+  <meta property="twitter:image" content="https://i.postimg.cc/QdrhqtzM/profilephotoeditor-ogimage.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/02N5zY4g/profilephotoeditor-icon-v2-64px.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://i.postimg.cc/02N5zY4g/profilephotoeditor-icon-v2-64px.png">
+  
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+  /* For Chrome, Safari, Edge, Opera - to remove up and down arrows in an input field of type number */
+  input[type="number"]::-webkit-inner-spin-button, 
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* For Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  </style>
+
+</head>
+
+<body class="bg-white w-full" cz-shortcut-listen="true">
+  <div class="flex justify-center">
+    <div class="flex flex-col justify-center items-center bg-gray-100 rounded-lg m-10 py-12 px-12">
+      <h1 class="text-3xl md:text-4xl text-center uppercase font-bold text-gray-700 mb-4">Profile Picture Editor</h1>
+      <div class="text-md text-center font-medium text-gray-500 mb-10 w-3/4">
+        Add a LinkedIn-inspired banner/badge to your profile picture. Add any text, color, topic or cause, not just #opentowork.
+      </div>
+      <div class="flex md:space-x-20 flex-wrap justify-center md:flex-nowrap md:flex-row flex-col-reverse">
+        <!-- <div class="space-y-4 md:w-1/2 mt-4 overflow-y-scroll h-96"> -->
+        <div class="flex flex-col flex-shrink-0 space-y-4 md:w-1/2 mt-4">
+          <div class="flex flex-col space-y-2 rounded-b-md bg-gray-100">
+          
+          <div>
+            <div class="mb-4 sm:block">
+              <nav class="isolate flex divide-x divide-gray-200 rounded-md shadow" aria-label="Tabs">
+                <a id="tab-1" href="javascript:void(0)" class="group relative min-w-0 flex-1 overflow-hidden rounded-l-md bg-white px-2 py-2 text-center text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10" aria-current="page">
+                  <span>Main</span>
+                  <span id="tab-1-underline" aria-hidden="true" class="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600"></span>
+                </a>
+                <a id="tab-2" href="javascript:void(0)" class="group relative min-w-0 flex-1 overflow-hidden bg-white px-2 py-2 text-center text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 focus:z-10">
+                  <span>Arc</span>
+                  <span id="tab-2-underline" aria-hidden="true" class="absolute inset-x-0 bottom-0 h-0.5 bg-transparent"></span>
+                </a>
+                <a id="tab-3" href="javascript:void(0)" class="group relative min-w-0 flex-1 overflow-hidden rounded-r-md bg-white px-2 py-2 text-center text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 focus:z-10">
+                  <span>Image</span>
+                  <span id="tab-3-underline" aria-hidden="true" class="absolute inset-x-0 bottom-0 h-0.5 bg-transparent"></span>
+                </a>
+              </nav>
+            </div>
+          </div>
+
+            <!-- 🗂️ TAB 1 -->
+            <div id="tab-content-1" class="block space-y-4">
+              <div class="flex flex-col space-y-2">
+                <label for="image-upload" class="text-lg font-medium">Upload Main Image:</label>
+                <div class="flex items-center relative justify-start px-3 py-2 bg-white text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
+                  <input type="file" accept="image/*" id="image-upload" class="hidden">
+                  <label for="image-upload" class="cursor-pointer text-xs flex-shrink-0 px-2 py-1 bg-gray-200 rounded-md border border-gray-300">Choose File:</label>
+                  <span id="file-name" class="ml-1 text-gray-500 truncate w-32"></span>
+                  <button id="remove-image" class="hidden absolute right-1 m-1 flex items-center justify-center p-1 h-6 w-6 text-gray-500 bg-gray-200 hover:text-gray-700 rounded-full cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="flex flex-col space-y-2">
+                <label for="arc-color" class="text-lg font-medium">Arc Color:</label>
+                <div class="flex items-center">
+                  <img style="min-width:16px;min-height:16px;box-sizing:unset;box-shadow:none;background:unset;padding:0 6px 0 0;cursor:pointer;" src="chrome-extension://ohcpnigalekghcmgcdcenkpelffpdolg/img/icon16.png" title="Select with ColorPick Eyedropper - See advanced option: &quot;Add ColorPick Eyedropper near input[type=color] fields on websites&quot;" class="colorpick-eyedropper-input-trigger"><input type="color" id="arc-color" value="#BA65D1" class="border-none w-12 h-11" colorpick-eyedropper-active="true">
+                  <input type="text" id="color-code" value="#BA65D1" class="ml-2 py-2 pl-4 w-full text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
+                </div>
+              </div>
+              
+              <div class="flex flex-col space-y-2">
+                <label for="banner-text" class="text-lg font-medium">Banner Text:</label>
+                <input type="text" id="banner-text" value="#DESPERATE" class="py-2 pl-4 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
+              </div>
+              
+              <div class="flex flex-col space-y-2">
+                <label for="word-shift" class="text-lg font-medium">Word Centering:</label>
+                <div class="flex items-center relative">  
+                  <input type="number" id="word-shift" value="0" step="0.01" class="py-2 pl-4 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-200 focus:border-transparent w-full">
+                    <div class="flex items-center absolute right-1">
+                    <div class="word-shift-plus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                      </svg>
+                    </div>
+                    <div class="word-shift-minus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"></path>
+                      </svg>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              
+            </div>
+            
+            <!-- 🗂️ TAB 2 -->
+            <div id="tab-content-2" class="hidden space-y-4">
+              
+              <div class="flex flex-col space-y-2">
+                <label for="text-color" class="text-lg font-medium">Text Color:</label>
+                <div class="flex items-center">
+                  <img style="min-width:16px;min-height:16px;box-sizing:unset;box-shadow:none;background:unset;padding:0 6px 0 0;cursor:pointer;" src="chrome-extension://ohcpnigalekghcmgcdcenkpelffpdolg/img/icon16.png" title="Select with ColorPick Eyedropper - See advanced option: &quot;Add ColorPick Eyedropper near input[type=color] fields on websites&quot;" class="colorpick-eyedropper-input-trigger"><input type="color" id="text-color" value="#FFFFFF" class="border-none w-12 h-11" colorpick-eyedropper-active="true">
+                  <input type="text" id="text-color-code" value="#FFFFFF" class="ml-2 py-2 pl-4 w-full text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
+                </div>
+              </div>
+              
+              <div class="flex flex-col space-y-2">
+                <label for="font-size" class="text-lg font-medium">Font Size:</label>
+                <div class="flex items-center relative">
+                  <input type="number" id="font-size" value="56" step="1" class="py-2 pl-4 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-200 focus:border-transparent w-full">
+                  <div class="flex items-center absolute right-1">
+                    <div class="font-size-plus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                      </svg>
+                    </div>
+                    <div class="font-size-minus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"></path>
+                      </svg>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              
+              <div class="flex flex-col space-y-2">
+                <label for="letter-spacing" class="text-lg font-medium">Letter Spacing:</label>
+                <div class="flex items-center relative">
+                  <input type="number" id="letter-spacing" value="0.6" step="0.01" class="py-2 pl-4 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-200 focus:border-transparent w-full">
+                  <div class="flex items-center absolute right-1">
+                    <div class="letter-spacing-plus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                      </svg>
+                    </div>
+                    <div class="letter-spacing-minus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"></path>
+                      </svg>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              
+              <div class="flex flex-col space-y-2">
+                <label for="arc-start" class="text-lg font-medium">Arc Start Position:</label>
+                <div class="flex items-center relative">
+                  <input type="number" id="arc-start" value="6.5" step="0.1" class="py-2 pl-4 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-200 focus:border-transparent w-full">
+                  <div class="flex items-center absolute right-1">
+                    <div class="arc-start-plus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                      </svg>
+                    </div>
+                    <div class="arc-start-minus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"></path>
+                      </svg>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              
+              <div class="flex flex-col space-y-2">
+                <label for="arc-end" class="text-lg font-medium">Arc End Position:</label>
+                <div class="flex items-center relative">
+                  <input type="number" id="arc-end" value="1.7" step="0.1" class="py-2 pl-4 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-200 focus:border-transparent w-full">
+                  <div class="flex items-center absolute right-1">
+                    <div class="arc-end-plus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                      </svg>
+                    </div>
+                    <div class="arc-end-minus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"></path>
+                      </svg>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              
+            </div>
+            
+            <!-- 🗂️ TAB 3 -->
+            <div id="tab-content-3" class="hidden space-y-4">
+              <div class="flex flex-col space-y-2">
+                <label for="image-x-shift" class="text-lg font-medium">Main Image X Shift:</label>
+                <div class="flex items-center relative">
+                  <input type="number" id="image-x-shift" value="0" step="1" class="py-2 pl-4 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-inset focus:ring-gray-200 focus:ring-2 focus:border-transparent w-full">
+                  <div class="flex items-center absolute right-1">
+                    <div class="image-x-shift-plus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                      </svg>
+                    </div>
+                    <div class="image-x-shift-minus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"></path>
+                      </svg>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              
+              <div class="flex flex-col space-y-2">
+                <label for="image-y-shift" class="text-lg font-medium">Main Image Y Shift:</label>
+                <div class="flex items-center relative">  
+                  <input type="number" id="image-y-shift" value="0" step="1" class="py-2 pl-4 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-200 focus:border-transparent w-full">
+                  <div class="flex items-center absolute right-1">
+                    <div class="image-y-shift-plus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                      </svg>
+                    </div>
+                    <div class="image-y-shift-minus-icon flex items-center justify-center w-6 h-6 bg-gray-200 m-1 rounded-full cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"></path>
+                      </svg>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              
+              <div class="flex flex-col space-y-2">
+                <label for="overlay-image-upload" class="text-lg font-medium">Upload Small Sticker Image:</label>
+                <div class="flex relative items-center justify-start px-3 py-2 bg-white text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
+                  <input type="file" accept="image/*" id="overlay-image-upload" class="hidden">
+                  <label for="overlay-image-upload" class="cursor-pointer text-xs flex-shrink-0 border border-gray-300 rounded-md bg-gray-200 px-2 py-1">Choose File:</label>
+                  <span id="overlay-file-name" class="ml-1 text-gray-500 truncate w-32"></span>
+                  <button id="remove-overlay-image" class="hidden absolute right-1 flex items-center justify-center m-1 p-1 h-6 w-6 text-gray-500 bg-gray-200 hover:text-gray-700 rounded-full cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col md:w-1/2 bg-gray-100 mt-2">
+          <div class="space-y-4 text-center">
+            <canvas id="canvas" class="block" width="600" height="600"></canvas>
+            <label for="profile-preview" class="text-lg font-medium">Preview image:</label>
+            <div id="profile-container" class="relative w-72 h-72 rounded-full overflow-hidden mb-4">
+              <img src=""
+            </div>
+            <button id="download-btn" class="w-full text-white font-bold py-2 px-4 rounded bg-green-500 hover:bg-green-700">Download Image</button>
+            <br><br>
+          </div>
+        </div>
+      </div>
+      <div class="footer text-center text-sm mt-20 mb-3 space-y-3">
+        <div>A project by <a href="https://jasonleow.com" target="_blank" class="text-blue-600 hover:text-blue-800">Jason Leow</a> <a href="https://x.com/jasonleowsg" target="_blank" class="text-blue-600 hover:text-blue-800">@jasonleowsg</a></div>
+        <div><a href="https://www.buymeacoffee.com/jasonleowsg" target="_blank" class="text-blue-600 hover:text-blue-800">Buy me a coffee ☕️</a></div>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    const imageUpload = document.getElementById("image-upload")
+    const imageXShiftInput = document.getElementById("image-x-shift")
+    const imageYShiftInput = document.getElementById("image-y-shift")
+    const downloadBtn = document.getElementById("download-btn")
+    const canvas = document.getElementById("canvas")
+    const ctx = canvas.getContext("2d")
+    const profilePreview = document.getElementById("profile-preview")
+    const arcColorInput = document.getElementById("arc-color")
+    const arcColorHexCodeInput = document.getElementById("color-code")
+    const arcStartInput = document.getElementById("arc-start")
+    const arcEndInput = document.getElementById("arc-end")
+    const textColorInput = document.getElementById("text-color")
+    const textColorHexCodeInput = document.getElementById('text-color-code');
+    const bannerTextInput = document.getElementById("banner-text")
+    const fontSizeInput = document.getElementById("font-size")
+    const letterSpacingInput = document.getElementById("letter-spacing")
+    const wordShiftInput = document.getElementById("word-shift")
+
+    let image;
+    
+    const overlayImageUpload = document.getElementById("overlay-image-upload");
+    let overlayImage;
+
+    // Update the overlayImageUpload event listener to crop the image to a square
+    overlayImageUpload.addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          overlayImage = new Image();
+          overlayImage.src = e.target.result;
+          overlayImage.onload = function () {
+            const squareSize = Math.min(overlayImage.width, overlayImage.height);
+            const x = (overlayImage.width - squareSize) / 2;
+            const y = (overlayImage.height - squareSize) / 2;
+
+            const canvas = document.createElement("canvas");
+            canvas.width = squareSize;
+            canvas.height = squareSize;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(overlayImage, x, y, squareSize, squareSize, 0, 0, squareSize, squareSize);
+
+            overlayImage.src = canvas.toDataURL();
+            updatePreview();
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    imageUpload.addEventListener("change", function (event) {
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = function (e) {
+          image = new Image()
+          image.src = e.target.result
+          image.onload = function () {
+            const size = 600
+            const radius = size / 2
+
+            // Set canvas size to the image size
+            canvas.width = size
+            canvas.height = size
+
+            updatePreview();
+          }
+        }
+        reader.readAsDataURL(file)
+      }
+    })
+    
+    imageXShiftInput.addEventListener("input", function () {
+      updatePreview();
+    });
+
+    imageYShiftInput.addEventListener("input", function () {
+      updatePreview();
+    });
+
+    arcColorInput.addEventListener("input", function () {
+      updatePreview();
+    });
+    
+    arcColorInput.addEventListener('input', () => {
+      arcColorHexCodeInput.value = arcColorInput.value;
+    });
+
+    arcColorHexCodeInput.addEventListener('input', () => {
+      arcColorInput.value = arcColorHexCodeInput.value;
+      updatePreview();
+    });
+    
+    arcStartInput.addEventListener("input", function () {
+      updatePreview();
+    });
+    
+    arcEndInput.addEventListener("input", function () {
+      updatePreview();
+    });
+    
+    textColorInput.addEventListener("input", function () {
+      updatePreview();
+    });
+    
+    textColorInput.addEventListener('input', () => {
+      textColorHexCodeInput.value = textColorInput.value;
+    });
+
+    textColorHexCodeInput.addEventListener('input', () => {
+      textColorInput.value = textColorHexCodeInput.value;
+      updatePreview();
+    });
+
+    bannerTextInput.addEventListener("input", function () {
+      updatePreview();
+    });
+    
+    fontSizeInput.addEventListener("input", function () {
+      updatePreview();
+    });
+    
+    letterSpacingInput.addEventListener("input", function () {
+      updatePreview();
+    });
+    
+    wordShiftInput.addEventListener("input", function () {
+      updatePreview();
+    });
+
+    
+    // Set default image
+    const defaultImage = new Image();
+
+    defaultImage.src = 'placeholder-image.png';
+    defaultImage.onload = function() {
+      profilePreview.src = defaultImage.src;
+      profilePreview.style.display = "block";
+      image = defaultImage; // Set the image variable to the default image
+      canvas.width = 600
+      canvas.height = 600
+      // setTimeout(updatePreview, 100); // Run updatePreview() after a 100ms delay
+      if (canvas.width > 0 && canvas.height > 0) {
+          updatePreview(); // Call updatePreview() directly
+      } else {
+      setTimeout(updatePreview, 100); // Run updatePreview() after a 100ms delay if canvas is not ready
+      }
+    };
+
+    function updatePreview() {
+      // Clear canvas and create a circular clipping path
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.clip();
+      
+      // Resize the image to a square
+      const squareSize = Math.min(image.width, image.height);
+      const x = (image.width - squareSize) / 2;
+      const y = (image.height - squareSize) / 2;
+
+      // Draw the profile image within the circular clipping path
+      // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      // ctx.drawImage(image, x, y, squareSize, squareSize, 0, 0, canvas.width, canvas.height);
+      // Draw the profile image within the circular clipping path
+      ctx.drawImage(image, x + parseFloat(imageXShiftInput.value), y + parseFloat(imageYShiftInput.value), squareSize, squareSize, 0, 0, canvas.width, canvas.height);
+      ctx.restore();
+
+      // Create the banner arc (bottom-left quadrant outline with gradient)
+      const arcWidth = canvas.width / 2 * 0.3; // Adjust this value to change the thickness of the arc
+      const startArcAngle = Math.PI * `${arcStartInput.value}` / 6; // 9 o'clock position
+      const endArcAngle = Math.PI * `${arcEndInput.value}` / 6; // 4 o'clock position
+      const totalArcAngle = startArcAngle - endArcAngle;
+      const steps = 300; // Number of segments to create the gradient effect
+
+      ctx.lineWidth = arcWidth;
+
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const angle = startArcAngle - t * totalArcAngle;
+
+        // Calculate opacity for solid middle 80% and quick fade at ends
+        let opacity;
+        if (t < 0.2) {
+          opacity = t * 7; // Quick fade in
+        } else if (t > 0.7) {
+          opacity = (1 - t) * 7; // Quick fade out
+        } else {
+          opacity = 1; // Solid middle
+        }
+
+        ctx.beginPath();
+        ctx.arc(
+          canvas.width / 2,
+          canvas.height / 2,
+          canvas.width / 2 - arcWidth / 2,
+          angle,
+          angle - totalArcAngle / steps,
+          true
+        );
+        ctx.strokeStyle = `rgba(${hexToRgb(arcColorInput.value).r}, ${hexToRgb(arcColorInput.value).g}, ${hexToRgb(arcColorInput.value).b}, ${opacity})`;
+        ctx.stroke();
+      }
+      
+      if (overlayImage) {
+        const overlaySize = 150; // Adjust this value to change the size of the overlay image
+        const overlayX = canvas.width - overlaySize / 2 - canvas.width / 4;
+        const overlayY = canvas.height / 2 - overlaySize / 2;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(overlayX + overlaySize / 2, overlayY + overlaySize / 2, overlaySize / 2, 0, Math.PI * 2, true);
+        ctx.clip();
+        ctx.drawImage(overlayImage, overlayX, overlayY, overlaySize, overlaySize);
+        ctx.restore();
+      }
+
+      // Add curved text along the arc
+      const text = bannerTextInput.value;
+      const textLength = text.length;
+      const textRadius = canvas.width / 2 - arcWidth / 2;
+      const anglePerChar = (Math.PI * parseFloat(letterSpacingInput.value)) / 10;
+
+      totalAngle = anglePerChar * textLength;
+
+      ctx.font = `bolder ${fontSizeInput.value}px Arial`;
+      ctx.fillStyle = textColorInput.value;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      // Calculate the angle for the text arc
+      // const startAngle = Math.PI * 1.47; // Start from 9 o'clock
+      const startAngle = Math.PI * 1.61 - (totalAngle / 2) + (Math.PI * 0.9 - totalAngle) / 2; // Center the text
+      const endAngle = Math.PI * 0.95; // End at 6 o'clock
+      const arcAngle = endAngle - startAngle;
+
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+
+      /*
+      for (let i = 0; i < text.length; i++) {
+        const angle = startAngle - i * anglePerChar;
+        ctx.save();
+        ctx.rotate(angle);
+        ctx.translate(0, -textRadius);
+        ctx.rotate(Math.PI / 1); // Rotate each character to face outward
+        ctx.fillText(text[i], 0, 0);
+        ctx.restore();
+        */
+        
+        // Define a custom kerning table for the Arial font
+        /*const kerningTable = {
+          'I': { 'A': -0.05, 'E': -0.05, 'O': -0.05, 'N': -0.05 }, // Adjust kerning for narrow letters
+          'A': { 'I': -0.05, 'E': -0.05, 'O': -0.05 },
+          'E': { 'I': -0.05, 'A': -0.05, 'O': -0.05 },
+          'O': { 'I': -0.05, 'A': -0.05, 'E': -0.05 },
+          'D': { 'I': -0.05, },
+          'N': { 'D': -0.05, },
+          'K': { 'I': -0.05, },
+        };
+        const char = text[i];
+        const nextChar = text[i + 1];
+        const kerningAdjustment = kerningTable[char] && kerningTable[char][nextChar] ? kerningTable[char][nextChar] : 0;
+        */
+        
+
+        for (let i = 0; i < text.length; i++) {
+        const angle = startAngle - i * anglePerChar + parseFloat(wordShiftInput.value);
+        ctx.save();
+        ctx.rotate(angle);
+        ctx.translate(0, -textRadius);
+        ctx.rotate(Math.PI / 1); // Rotate each character to face outward
+
+        ctx.fillText(text[i], 0, 0);
+        ctx.restore();
+      }
+      ctx.restore();
+
+      // Show preview of the image
+      // profilePreview.src = canvas.toDataURL("image/png");
+      // profilePreview.style.display = "block";
+      
+      // Show preview of the image
+      if (image) {
+        profilePreview.src = canvas.toDataURL("image/png");
+      } else {
+        profilePreview.src = defaultImage.src;
+        
+      }
+      profilePreview.style.display = "block";
+
+      // Enable download button
+      downloadBtn.disabled = false;
+      downloadBtn.classList.remove('bg-gray-500', 'hover:bg-gray-700', 'cursor-not-allowed');
+      downloadBtn.classList.add('bg-green-500', 'hover:bg-green-700');
+    }
+
+    downloadBtn.addEventListener("click", function () {
+      // Trigger download
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "profile-image.png";
+      link.click();
+    })
+
+    function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
+    }
+    
+    const removeImageButton = document.getElementById("remove-image");
+    removeImageButton.addEventListener("click", function () {
+      imageUpload.value = "";
+      image = null;
+      // Clear the canvas and show the default image
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      profilePreview.src = defaultImage.src;
+      profilePreview.style.display = "block";
+    });
+    
+    const fileInput = document.getElementById('image-upload');
+    const removeButton = document.getElementById('remove-image');
+    const fileNameSpan = document.getElementById('file-name');
+
+    fileInput.addEventListener('change', (e) => {
+      const fileName = e.target.files[0].name;
+      fileNameSpan.textContent = fileName;
+      removeButton.style.display = 'block';
+    });
+
+    removeButton.addEventListener('click', () => {
+      fileInput.value = '';
+      fileNameSpan.textContent = '';
+      removeButton.style.display = 'none';
+    });
+    
+    const removeOverlayButton = document.getElementById('remove-overlay-image');
+    const overlayFileNameSpan = document.getElementById('overlay-file-name');
+
+    overlayImageUpload.addEventListener('change', (e) => {
+      const fileName = e.target.files[0].name;
+      overlayFileNameSpan.textContent = fileName;
+      removeOverlayButton.style.display = 'block';
+    });
+
+    removeOverlayButton.addEventListener('click', () => {
+      overlayImageUpload.value = '';
+      overlayFileNameSpan.textContent = '';
+      removeOverlayButton.style.display = 'none';
+      overlayImage = null;
+      updatePreview();
+    });
+    
+    const tabButtons = document.querySelectorAll('#tab-1, #tab-2, #tab-3');
+    const tabContents = document.querySelectorAll('#tab-content-1, #tab-content-2, #tab-content-3');
+    const tabUnderlines = document.querySelectorAll('#tab-1-underline, #tab-2-underline, #tab-3-underline');
+
+    tabButtons.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        tabButtons.forEach((btn) => btn.classList.remove('bg-gray-300'));
+        // button.classList.add('bg-gray-300');
+        tabUnderlines.forEach((underline) => underline.classList.remove('bg-blue-600'));
+        tabUnderlines[index].classList.add('bg-blue-600');
+        tabContents.forEach((content) => content.classList.add('hidden'));
+        tabContents[index].classList.remove('hidden');
+      });
+    });
+    
+    function addShiftListeners(plusIconSelector, minusIconSelector, inputFieldSelector) {
+      const plusIcon = document.querySelector(plusIconSelector);
+      const minusIcon = document.querySelector(minusIconSelector);
+      const inputField = document.querySelector(inputFieldSelector);
+
+      // Prevent text selection on mousedown
+      plusIcon.addEventListener('mousedown', (event) => {
+        event.preventDefault();
+      });
+
+      minusIcon.addEventListener('mousedown', (event) => {
+        event.preventDefault();
+      });
+
+      // Handle the click events
+      plusIcon.addEventListener('click', () => {
+        inputField.stepUp();
+        updatePreview();
+      });
+
+      minusIcon.addEventListener('click', () => {
+        inputField.stepDown();
+        updatePreview();
+      });
+    }
+
+    // Now you can use this function for any input field with its corresponding icons
+    addShiftListeners('.image-x-shift-plus-icon', '.image-x-shift-minus-icon', '#image-x-shift');
+    addShiftListeners('.image-y-shift-plus-icon', '.image-y-shift-minus-icon', '#image-y-shift');
+    addShiftListeners('.word-shift-plus-icon', '.word-shift-minus-icon', '#word-shift');
+    addShiftListeners('.font-size-plus-icon', '.font-size-minus-icon', '#font-size');
+    addShiftListeners('.letter-spacing-plus-icon', '.letter-spacing-minus-icon', '#letter-spacing');
+    addShiftListeners('.arc-start-plus-icon', '.arc-start-minus-icon', '#arc-start');
+    addShiftListeners('.arc-end-plus-icon', '.arc-end-minus-icon', '#arc-end');
+
+    /*
+    const colorInput = document.getElementById('arc-color');
+    const colorCodeSpan = document.getElementById('color-code');
+    // const colorSwatchSpan = document.getElementById('color-swatch');
+
+    colorInput.addEventListener('input', () => {
+      colorCodeSpan.textContent = colorInput.value;
+      // colorSwatchSpan.style.backgroundColor = colorInput.value;
+    });
+
+    // Initialize the color code span and color swatch span with the initial value
+    colorCodeSpan.textContent = colorInput.value;
+    // colorSwatchSpan.style.backgroundColor = colorInput.value;
+    
+    const colorInputText = document.getElementById('text-color');
+    const colorCodeSpanText = document.getElementById('text-color-code');
+
+    colorInputText.addEventListener('input', () => {
+    colorCodeSpanText.textContent = colorInputText.value;
+    });
+
+    // Initialize the color code span and color swatch span with the initial value
+    colorCodeSpanText.textContent = colorInputText.value;
+    */
+    
+  </script>
+
+
+</body></html>

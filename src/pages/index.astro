@@ -1,10 +1,11 @@
 ---
-import Meta from "@components/Meta.astro";
-import Hero from "@components/Hero.astro";
-import Editor from "@components/Editor.astro";
-import Icon from "@/components/ui/icons/Icon.astro";
+import Meta from "@common/Meta.astro";
+import Hero from "@common/Hero.astro";
+import ImageCustomizer from "@common/ImageCustomizer.astro";
+import Icon from "@ui/icons/Icon.astro";
 import { SITE } from "@data/constants";
-import "@/styles/globals.css";
+import "@styles/globals.css";
+import "@styles/styles.css";
 
 const { title = SITE.title, meta, structuredData } = Astro.props;
 
@@ -16,7 +17,7 @@ interface Props {
 }
 ---
 
-<html lang="en">
+<html lang="en" class="scrollbar-hide">
   <head>
     <Meta meta={meta} structuredData={structuredData} />
     <meta name="generator" content={Astro.generator} />
@@ -24,47 +25,16 @@ interface Props {
   </head>
   <body class="antialiased">
     <Hero />
-    <Editor />
+    <ImageCustomizer />
     <button
       id="btnToTop"
-      class="fixed sm:hidden scale-0 opacity-0 bottom-7 left-3 transition-all duration-500 border-none outline-none p-3 rounded-full bg-sky-200 text-white"
+      class="fixed lg:hidden scale-0 opacity-0 bottom-3 left-3 transition-all duration-500 border-none outline-none p-3 rounded-full bg-sky-200 text-white"
     >
       <Icon name="arrowUp" />
     </button>
-
     <script>
-      const btnToTop = document.getElementById(
-        "btnToTop"
-      ) as HTMLButtonElement | null;
-
-      const isMobile: boolean = window.innerWidth < 600;
-
-      if (isMobile && btnToTop) {
-        window.onscroll = () => scrollFunction();
-      }
-
-      function scrollFunction() {
-        if (!btnToTop) return;
-
-        if (
-          document.body.scrollTop > 200 ||
-          document.documentElement.scrollTop > 200
-        ) {
-          btnToTop.classList.remove("scale-0", "opacity-0");
-          btnToTop.classList.add("scale-100", "opacity-100");
-
-        } else {
-          btnToTop.classList.remove("scale-100", "opacity-100");
-      btnToTop.classList.add("scale-0", "opacity-0");
-        }
-      }
-
-      btnToTop?.addEventListener("click", () => topFunction());
-
-      function topFunction() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-      }
+      import "@scripts/main";
+      import "@scripts/lenisSmoothScroll";
     </script>
   </body>
 </html>

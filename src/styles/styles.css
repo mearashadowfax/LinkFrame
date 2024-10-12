@@ -1,0 +1,64 @@
+@media (min-width: 1024px) {
+  .sticky-column {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 15%;
+    align-self: start;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.colorpick-eyedropper-input-trigger {
+  visibility: hidden;
+}
+
+.colorPicker {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.colorPicker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.colorPicker::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.colorPicker::-moz-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+
+canvas {
+  border-radius: 9999px;
+  height: 400px;
+  width: 400px;
+}
+.dragging {
+  @apply bg-slate-100;
+}
+
+@media (max-width: 1280px) {
+  canvas {
+    height: 300px;
+    width: 300px;
+  }
+}

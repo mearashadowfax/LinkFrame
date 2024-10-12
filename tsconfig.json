@@ -6,18 +6,29 @@
       "@/*": [
         "./src/*"
       ],
-      "@components/*": [
+      "@common/*": [
         "src/components/common/*"
+      ],
+      "@ui/*": [
+        "src/components/ui/*"
       ],
       "@data/*": [
         "src/data/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@scripts/*": [
+        "src/scripts/*"
       ],
       "@images/*": [
         "src/images/*"
       ],
       "@favicon/*": [
         "src/favicon/*"
-      ],
-    }
+      ]
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   }
 }
