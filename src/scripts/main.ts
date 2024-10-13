@@ -304,7 +304,6 @@ function drawCircularArcAndText() {
 function enableDragging(canvas: HTMLCanvasElement) {
   canvas.style.cursor = "grab";
 
-  // Mouse events
   canvas.addEventListener("mousedown", (e) => {
     startDragging(e.offsetX, e.offsetY);
   });
@@ -318,7 +317,6 @@ function enableDragging(canvas: HTMLCanvasElement) {
   canvas.addEventListener("mouseup", () => stopDragging());
   canvas.addEventListener("mouseleave", () => stopDragging());
 
-  // Touch events
   canvas.addEventListener("touchstart", (e) => {
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
