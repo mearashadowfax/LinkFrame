@@ -47,27 +47,27 @@ import InputNumber from "@ui/InputNumber.astro";
           title="Frame Thickness"
           id="frameThicknessValue"
           secondId="frameThicknessSlider"
-          value={10}
+          value={50}
           min={0}
-          max={20}
+          max={100}
         />
 
         <RangeSlider
           title="Frame Start Position"
           id="startPositionValue"
           secondId="startPositionSlider"
-          value={10}
+          value={225}
           min={0}
-          max={20}
+          max={450}
         />
 
         <RangeSlider
           title="Frame End Position"
           id="endPositionValue"
           secondId="endPositionSlider"
-          value={10}
+          value={25}
           min={0}
-          max={20}
+          max={450}
         />
 
         <div class="max-w-md lg:max-w-xs mx-auto p-4">
@@ -80,7 +80,7 @@ import InputNumber from "@ui/InputNumber.astro";
             type="text"
             id="frameTextInput"
             class="block w-full rounded-lg border-slate-200 px-4 py-3 text-base focus:border-sky-500 focus:ring-sky-500"
-            placeholder="#LinkedIn"
+            placeholder="#ONTHEHUNT"
           />
         </div>
 
@@ -105,6 +105,15 @@ import InputNumber from "@ui/InputNumber.astro";
           dataInput="data-hs-input-letter-spacing"
           dataIncrement="data-hs-input-letter-spacing-increment"
           dataDecrement="data-hs-input-letter-spacing-decrement"
+        />
+
+        <RangeSlider
+          title="Text Placement"
+          id="textPlacementValue"
+          secondId="textPlacementSlider"
+          value={140}
+          min={0}
+          max={280}
         />
       </div>
 

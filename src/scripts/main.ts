@@ -13,14 +13,38 @@ const uploadInterface = document.getElementById(
 const imagePreview = document.getElementById("imagePreview") as HTMLElement;
 const progress = document.getElementById("progress") as HTMLElement;
 const controls = document.getElementById("controls") as HTMLElement;
-const rotationValue = document.getElementById(
-  "rotateValue"
-) as HTMLInputElement;
-const rotationSlider = document.getElementById(
-  "rotateSlider"
-) as HTMLInputElement;
-const scaleValue = document.getElementById("scaleValue") as HTMLInputElement;
-const scaleSlider = document.getElementById("scaleSlider") as HTMLInputElement;
+
+const elements = {
+  rotationValue: document.getElementById("rotateValue") as HTMLInputElement,
+  rotationSlider: document.getElementById("rotateSlider") as HTMLInputElement,
+  scaleValue: document.getElementById("scaleValue") as HTMLInputElement,
+  scaleSlider: document.getElementById("scaleSlider") as HTMLInputElement,
+  frameThicknessValue: document.getElementById(
+    "frameThicknessValue"
+  ) as HTMLInputElement,
+  frameThicknessSlider: document.getElementById(
+    "frameThicknessSlider"
+  ) as HTMLInputElement,
+  startPositionValue: document.getElementById(
+    "startPositionValue"
+  ) as HTMLInputElement,
+  startPositionSlider: document.getElementById(
+    "startPositionSlider"
+  ) as HTMLInputElement,
+  endPositionValue: document.getElementById(
+    "endPositionValue"
+  ) as HTMLInputElement,
+  endPositionSlider: document.getElementById(
+    "endPositionSlider"
+  ) as HTMLInputElement,
+  textPlacementValue: document.getElementById(
+    "textPlacementValue"
+  ) as HTMLInputElement,
+  textPlacementSlider: document.getElementById(
+    "textPlacementSlider"
+  ) as HTMLInputElement,
+};
+
 const resetButton = document.getElementById("resetButton") as HTMLButtonElement;
 const startOverButton = document.getElementById(
   "startOverButton"
@@ -28,13 +52,9 @@ const startOverButton = document.getElementById(
 const downloadButton = document.getElementById(
   "downloadButton"
 ) as HTMLButtonElement;
-
-
-// Arc parameters
-const startPositionValue = document.getElementById("startPositionValue") as HTMLInputElement;
-const endPositionValue = document.getElementById("endPositionValue") as HTMLInputElement;
-const frameTextInput = document.getElementById("frameTextInput") as HTMLInputElement;
-const fontSizeInput = document.getElementById("fontSizeInput") as HTMLInputElement;
+const frameTextInput = document.getElementById(
+  "frameTextInput"
+) as HTMLInputElement;
 const hexInput2 = document.getElementById("hexInput2") as HTMLInputElement;
 const hexInput3 = document.getElementById("hexInput3") as HTMLInputElement;
 
@@ -45,18 +65,22 @@ let rotation = 0;
 let scale = 1;
 let offsetX = 0;
 let offsetY = 0;
+let startPosition = 225;
+let endPosition = 25;
+let frameThickness = 50;
+let textInput = "#ONTHEHUNT";
+let fontSize = 32;
+let letterSpacing = 0;
+let textPlacement = 140;
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
 let currentCanvasBackgroundColor = getRandomColor();
 
-// Show file dialog when clicking 'browse'
 browseButton.addEventListener("click", () => imageUpload.click());
-
-// Handle file selection
 imageUpload.addEventListener("change", handleFileUpload);
 
-// Drag-and-drop event listeners
+// Drag-and-drop
 container.addEventListener("dragenter", () =>
   container.classList.add("dragging")
 );
@@ -76,7 +100,6 @@ container.addEventListener("drop", (e) => {
   }
 });
 
-// File upload handler
 function handleFileUpload(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
@@ -91,37 +114,28 @@ function handleFileUpload(event: Event) {
   uploadInterface.classList.add("hidden");
   controls.classList.add("hidden");
 
-  // Create canvas element if not already created
   if (!canvas) {
     canvas = document.createElement("canvas");
     canvas.id = "canvas";
     canvas.className = "border border-slate-300";
     imagePreview.appendChild(canvas);
     ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-
-    // Enable dragging after image is loaded
     enableDragging(canvas);
   }
-
-  // Display the image preview once it's loaded
   displayImagePreview(file);
   imageUpload.value = "";
 }
 
-// Display image preview
 function displayImagePreview(file: File) {
   const reader = new FileReader();
 
   reader.onload = (e) => {
     image.src = e.target?.result as string;
     image.onload = () => {
-      // Set canvas dimensions
       canvas!.width = 400;
       canvas!.height = 400;
 
-      // Image is fully loaded, so we can safely redraw the canvas now
       redrawCanvas();
-      // Hide the progress indicator and show the canvas
       progress.classList.add("hidden");
       imagePreview.classList.remove("hidden");
       uploadInterface.classList.add("hidden");
@@ -140,7 +154,7 @@ function rgba(r: number, g: number, b: number, a: number): string {
 }
 
 function hexToRgb(hex: string) {
-  hex = hex.replace(/^#/, '');
+  hex = hex.replace(/^#/, "");
   const bigint = parseInt(hex, 16);
   const r = (bigint >> 16) & 255;
   const g = (bigint >> 8) & 255;
@@ -148,61 +162,92 @@ function hexToRgb(hex: string) {
   return { r, g, b };
 }
 
-// Redraw the canvas
 function redrawCanvas() {
   if (!ctx || !image.complete || image.naturalWidth === 0) return;
 
   requestAnimationFrame(() => {
     if (ctx && canvas) {
-      // Clear the canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Fill canvas background with color if needed
+      ctx.save();
+
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = canvas.width / 2;
+
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+      ctx.clip();
+
       ctx.fillStyle = currentCanvasBackgroundColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Apply transformations (rotation and scale)
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.translate(canvas.width / 2 + offsetX, canvas.height / 2 + offsetY);
       ctx.rotate((rotation * Math.PI) / 180);
       ctx.scale(scale, scale);
 
-      // Draw the image centered on the canvas
       ctx.drawImage(image, -image.width / 2, -image.height / 2);
 
-      // Restore the default transformation matrix
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-    }
 
-    // Draw the circular arc
-    drawCircularArcAndText();
+      drawCircularArcAndText();
+
+      ctx.restore();
+
+      drawBackgroundOutsideCircle(
+        ctx,
+        centerX,
+        centerY,
+        radius,
+        currentCanvasBackgroundColor
+      );
+    }
   });
+}
+
+function drawBackgroundOutsideCircle(
+  ctx: CanvasRenderingContext2D,
+  centerX: number,
+  centerY: number,
+  radius: number,
+  currentCanvasBackgroundColor: string
+): void {
+  ctx.save();
+
+  // background color outside the circle
+  ctx.beginPath();
+  ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);  // Full canvas rectangle
+  ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);   // Circle in the middle
+  ctx.fillStyle = currentCanvasBackgroundColor;       // Set background color
+  ctx.fill("evenodd"); // Fill outside the circle
+
+  ctx.restore();
 }
 
 function drawCircularArcAndText() {
   if (!ctx || !canvas) return;
-
-  // Create the banner arc
-  const arcWidth = (canvas.width / 2) * 0.3; // Adjust this value to change the thickness of the arc
-  const startArcAngle = (Math.PI * parseFloat(startPositionValue.value)) / 6; // Adjust start angle based on input
-  const endArcAngle = (Math.PI * parseFloat(endPositionValue.value)) / 6; // Adjust end angle based on input
+  // Frame
+  const arcWidth = frameThickness;
+  const startArcAngle = (Math.PI * startPosition) / 180;
+  const endArcAngle = (Math.PI * endPosition) / 180;
   const totalArcAngle = startArcAngle - endArcAngle;
 
   ctx.lineWidth = arcWidth;
-  const steps = 300; // Number of segments to create the gradient effect
+  const steps = 250;
 
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
     const angle = startArcAngle - t * totalArcAngle;
 
-    // Calculate opacity for solid middle 80% and quick fade at ends
-    let opacity: number;
+    // solid middle 80% and fade at ends
+    let opacity;
     if (t < 0.2) {
-      opacity = t * 7; // Quick fade in
+      opacity = t * 7;
     } else if (t > 0.7) {
-      opacity = (1 - t) * 7; // Quick fade out
+      opacity = (1 - t) * 7;
     } else {
-      opacity = 1; // Solid middle
+      opacity = 1;
     }
 
     ctx.beginPath();
@@ -215,7 +260,7 @@ function drawCircularArcAndText() {
       true
     );
 
-    const color = hexInput2.value; // Color from input
+    const color = hexInput2.value;
     ctx.strokeStyle = rgba(
       hexToRgb(color).r,
       hexToRgb(color).g,
@@ -225,20 +270,23 @@ function drawCircularArcAndText() {
     ctx.stroke();
   }
 
-  // Draw the text along the arc
-  const text = frameTextInput.value;
+  const text = textInput;
   const textLength = text.length;
   const textRadius = canvas.width / 2 - arcWidth / 2;
-  const anglePerChar = Math.PI * 0.1; // Example letter spacing
 
+  const baseAnglePerChar = (Math.PI / textLength) * 0.75;
+  const anglePerChar = baseAnglePerChar + letterSpacing;
   const totalAngle = anglePerChar * textLength;
+  const textColor = hexInput3.value;
 
-  ctx.font = `${fontSizeInput.value}px Arial`; // Font size from input
-  ctx.fillStyle = "#000"; // Text color can be customizable later
+  ctx.font = `bolder ${fontSize}px Helvetica`;
+  ctx.fillStyle = textColor;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  const startAngle = Math.PI * 1.61 - totalAngle / 2; // Center the text
+  const mappedTextPlacement = (textPlacement / 100) * Math.PI - Math.PI / 2;
+
+  const startAngle = Math.PI - totalAngle / 2 + mappedTextPlacement;
   ctx.save();
   ctx.translate(canvas.width / 2, canvas.height / 2);
 
@@ -246,14 +294,13 @@ function drawCircularArcAndText() {
     const angle = startAngle - i * anglePerChar;
     ctx.save();
     ctx.rotate(angle);
-    ctx.fillText(text[i], textRadius, 0); // Draw text at the calculated angle and radius
+    ctx.translate(0, -textRadius);
+    ctx.rotate(Math.PI / 1);
+    ctx.fillText(text[i], 0, 0);
     ctx.restore();
   }
-  
-  ctx.restore();
 }
-
-// Enable dragging of the canvas
+// Enable dragging
 function enableDragging(canvas: HTMLCanvasElement) {
   canvas.style.cursor = "grab";
 
@@ -283,50 +330,110 @@ function enableDragging(canvas: HTMLCanvasElement) {
   });
 }
 
-// Event listener for the rotation input field
-rotationValue.addEventListener("input", () => {
-  rotation = parseFloat(rotationValue.value);
-  rotationSlider.value = rotationValue.value;
+elements.rotationValue.addEventListener("input", () => {
+  rotation = parseFloat(elements.rotationValue.value);
+  elements.rotationSlider.value = elements.rotationValue.value;
   redrawCanvas();
 });
 
-// Event listener for the rotation slider
-rotationSlider.addEventListener("input", () => {
-  rotation = parseFloat(rotationSlider.value);
-  rotationValue.value = rotationSlider.value;
+elements.rotationSlider.addEventListener("input", () => {
+  rotation = parseFloat(elements.rotationSlider.value);
+  elements.rotationValue.value = elements.rotationSlider.value;
   redrawCanvas();
 });
 
-// Event listener for the rotation input field
-scaleValue.addEventListener("input", () => {
-  scale = parseFloat(scaleValue.value);
-  scaleSlider.value = scaleValue.value;
+elements.scaleValue.addEventListener("input", () => {
+  scale = parseFloat(elements.scaleValue.value);
+  elements.scaleSlider.value = elements.scaleValue.value;
   redrawCanvas();
 });
 
-// Event listener for the rotation slider
-scaleSlider.addEventListener("input", () => {
-  scale = parseFloat(scaleSlider.value);
-  scaleValue.value = scaleSlider.value;
+elements.scaleSlider.addEventListener("input", () => {
+  scale = parseFloat(elements.scaleSlider.value);
+  elements.scaleValue.value = elements.scaleSlider.value;
+  redrawCanvas();
+});
+
+elements.frameThicknessValue.addEventListener("input", () => {
+  frameThickness = parseFloat(elements.frameThicknessValue.value);
+  elements.frameThicknessSlider.value = elements.frameThicknessValue.value;
+  redrawCanvas();
+});
+
+elements.frameThicknessSlider.addEventListener("input", () => {
+  frameThickness = parseFloat(elements.frameThicknessSlider.value);
+  elements.frameThicknessValue.value = elements.frameThicknessSlider.value;
+  redrawCanvas();
+});
+
+elements.startPositionValue.addEventListener("input", () => {
+  startPosition = parseFloat(elements.startPositionValue.value);
+  elements.startPositionSlider.value = elements.startPositionValue.value;
+  redrawCanvas();
+});
+
+elements.startPositionSlider.addEventListener("input", () => {
+  startPosition = parseFloat(elements.startPositionSlider.value);
+  elements.startPositionValue.value = elements.startPositionSlider.value;
+  redrawCanvas();
+});
+
+elements.endPositionValue.addEventListener("input", () => {
+  endPosition = parseFloat(elements.endPositionValue.value);
+  elements.endPositionSlider.value = elements.endPositionValue.value;
+  redrawCanvas();
+});
+
+elements.endPositionSlider.addEventListener("input", () => {
+  endPosition = parseFloat(elements.endPositionSlider.value);
+  elements.endPositionValue.value = elements.endPositionSlider.value;
+  redrawCanvas();
+});
+
+frameTextInput.addEventListener("input", () => {
+  textInput = frameTextInput.value;
+  redrawCanvas();
+});
+
+elements.textPlacementValue.addEventListener("input", () => {
+  textPlacement = parseFloat(elements.textPlacementValue.value);
+  elements.textPlacementSlider.value = elements.textPlacementValue.value;
+  redrawCanvas();
+});
+
+elements.textPlacementSlider.addEventListener("input", () => {
+  textPlacement = parseFloat(elements.textPlacementSlider.value);
+  elements.textPlacementValue.value = elements.textPlacementSlider.value;
   redrawCanvas();
 });
 
 resetButton.addEventListener("click", () => {
-  // Reset transformations
   rotation = 0;
   scale = 1;
-  offsetX = 0;
-  offsetY = 0;
+  frameThickness = 50;
+  startPosition = 200;
+  endPosition = 45;
+  textInput = "#ONTHEHUNT";
+  fontSize = 32;
+  letterSpacing = 0;
+  textPlacement = 140;
 
-  // Reset input values
-  rotationValue.value = rotation.toString();
-  scaleValue.value = scale.toString();
-  rotationSlider.value = rotation.toString();
-  scaleSlider.value = scale.toString();
+  elements.rotationValue.value = rotation.toString();
+  elements.rotationSlider.value = rotation.toString();
+  elements.scaleValue.value = scale.toString();
+  elements.scaleSlider.value = scale.toString();
+  elements.frameThicknessValue.value = frameThickness.toString();
+  elements.frameThicknessSlider.value = frameThickness.toString();
+  elements.startPositionValue.value = startPosition.toString();
+  elements.startPositionSlider.value = startPosition.toString();
+  elements.endPositionValue.value = endPosition.toString();
+  elements.endPositionSlider.value = endPosition.toString();
+  elements.textPlacementValue.value = textPlacement.toString();
+  elements.textPlacementSlider.value= textPlacement.toString();
+  frameTextInput.value = textInput.toString();
   redrawCanvas();
 });
 
-// Start over with the image upload
 startOverButton.addEventListener("click", () => {
   resetUploadState();
   // Delay the click event to ensure state is reset before opening file dialog
@@ -368,15 +475,15 @@ interface ColorSection {
   colorPicker: HTMLInputElement;
   randomBtn: HTMLButtonElement;
   isForCanvas: boolean;
+  isForFrame: boolean;
+  isForText: boolean;
 }
 
-// Function to generate a random color (hex format)
 function getRandomColor(): string {
   const letters = "0123456789ABCDEF";
   return `#${Array.from({ length: 6 }, () => letters[Math.floor(Math.random() * 16)]).join("")}`;
 }
 
-// Function to set the color and update either the canvas background or a section
 function setColor(section: ColorSection, color: string) {
   section.hexInput.value = color;
   section.hexInput.placeholder = color;
@@ -384,40 +491,45 @@ function setColor(section: ColorSection, color: string) {
 
   if (section.isForCanvas) {
     setCanvasBackgroundColor(color);
+  } else if (section.isForFrame) {
+    hexInput2.value = color;
+    redrawCanvas();
+  } else if (section.isForText) {
+    hexInput3.value = color;
+    redrawCanvas();
   }
 }
 
-
 function setCanvasBackgroundColor(color: string) {
   if (currentCanvasBackgroundColor !== color) {
-    currentCanvasBackgroundColor = color; // Update only if it's different
+    currentCanvasBackgroundColor = color;
 
     const ctx = canvas?.getContext("2d");
     if (ctx) {
       ctx.fillStyle = color;
-      ctx.fillRect(0, 0, canvas!.width, canvas!.height); // Set the background
+      ctx.fillRect(0, 0, canvas!.width, canvas!.height);
     }
 
-    redrawCanvas(); // Redraw the canvas to reflect the new background color
+    redrawCanvas();
   }
 }
 
 function attachEventListenersToSection(section: ColorSection) {
   section.randomBtn.addEventListener("click", () => {
     const randomColor = getRandomColor();
-    setColor(section, randomColor); // Set new random color
+    setColor(section, randomColor);
   });
 
   section.hexInput.addEventListener("input", (e) => {
     const value = (e.target as HTMLInputElement).value;
     if (/^#[0-9A-F]{6}$/i.test(value)) {
-      setColor(section, value); // Set color based on hex input
+      setColor(section, value);
     }
   });
 
   section.colorPicker.addEventListener("input", (e) => {
     const color = (e.target as HTMLInputElement).value;
-    setColor(section, color); // Set color based on color picker
+    setColor(section, color);
   });
 }
 
@@ -427,46 +539,59 @@ const sections = [
     colorPickerId: "colorPicker1",
     randomBtnId: "randomBtn1",
     isForCanvas: true,
+    isForFrame: false,
+    isForText: false,
   },
   {
     hexInputId: "hexInput2",
     colorPickerId: "colorPicker2",
     randomBtnId: "randomBtn2",
     isForCanvas: false,
+    isForFrame: true,
+    isForText: false,
   },
   {
     hexInputId: "hexInput3",
     colorPickerId: "colorPicker3",
     randomBtnId: "randomBtn3",
     isForCanvas: false,
+    isForFrame: false,
+    isForText: true,
   },
 ];
 
-sections.forEach(({ hexInputId, colorPickerId, randomBtnId, isForCanvas }) => {
-  const hexInput = document.getElementById(hexInputId) as HTMLInputElement;
-  const colorPicker = document.getElementById(
-    colorPickerId
-  ) as HTMLInputElement;
-  const randomBtn = document.getElementById(randomBtnId) as HTMLButtonElement;
+sections.forEach(
+  ({
+    hexInputId,
+    colorPickerId,
+    randomBtnId,
+    isForCanvas,
+    isForFrame,
+    isForText,
+  }) => {
+    const hexInput = document.getElementById(hexInputId) as HTMLInputElement;
+    const colorPicker = document.getElementById(
+      colorPickerId
+    ) as HTMLInputElement;
+    const randomBtn = document.getElementById(randomBtnId) as HTMLButtonElement;
 
-  if (hexInput && colorPicker && randomBtn) {
-    const section: ColorSection = {
-      hexInput,
-      colorPicker,
-      randomBtn,
-      isForCanvas,
-    };
+    if (hexInput && colorPicker && randomBtn) {
+      const section: ColorSection = {
+        hexInput,
+        colorPicker,
+        randomBtn,
+        isForCanvas,
+        isForFrame,
+        isForText,
+      };
 
-    const randomColor = getRandomColor();
-    setColor(section, randomColor);
+      const randomColor = getRandomColor();
+      setColor(section, randomColor);
 
-    attachEventListenersToSection(section);
-  } else {
-    console.error(
-      `One or more elements not found for section: ${hexInputId}, ${colorPickerId}, ${randomBtnId}`
-    );
+      attachEventListenersToSection(section);
+    }
   }
-});
+);
 
 // Letter spacing and font size adjustments
 
@@ -506,9 +631,9 @@ function adjustSpacing(action: "increase" | "decrease") {
 }
 
 function updateLetterSpacing() {
-  const value = letterSpacingValues[currentIndexLetterSpacing];
-  inputElementLetterSpacing!.value = value.toString();
-  console.log(`Current letter spacing: ${value}em`);
+  letterSpacing = letterSpacingValues[currentIndexLetterSpacing];
+  inputElementLetterSpacing!.value = letterSpacing.toString();
+  redrawCanvas();
 }
 
 const fontSizeValues = [16, 20, 24, 32, 36, 40, 48];
@@ -543,25 +668,22 @@ function adjustFontSize(action: "increase" | "decrease") {
 }
 
 function updateFontSize() {
-  const value = fontSizeValues[currentFontSizeIndex];
-  inputElementFontSize!.value = value.toString();
-  console.log(`Current font size: ${value}px`);
+  fontSize = fontSizeValues[currentFontSizeIndex];
+  inputElementFontSize!.value = fontSize.toString();
+  redrawCanvas();
 }
 
-// Getting the button element by id with strict typing
 const btnToTop = document.getElementById(
   "btnToTop"
 ) as HTMLButtonElement | null;
 
-// Check if the current device is mobile
 const isMobile: boolean = window.innerWidth < 1024;
 
-// Only add scroll functionality if it's a mobile device
 if (isMobile && btnToTop) {
   window.onscroll = () => scrollFunction();
 }
 
-// Function to show/hide the button based on scroll position
+// Function to show/hide the button
 function scrollFunction() {
   if (!btnToTop) return;
 
@@ -577,7 +699,6 @@ function scrollFunction() {
   }
 }
 
-// Scroll to the top when the button is clicked
 btnToTop?.addEventListener("click", () => topFunction());
 
 function topFunction() {
