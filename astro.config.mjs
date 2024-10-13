@@ -5,11 +5,9 @@ import tailwind from '@astrojs/tailwind';
 
 import sitemap from '@astrojs/sitemap';
 
-import react from '@astrojs/react';
-
 // https://astro.build/config
 export default defineConfig({
-  site: "https://banners.li",
+  site: "https://link-frame.vercel.app/",
   trailingSlash: "never",
   prefetch: true,
   experimental: {
@@ -18,5 +16,5 @@ export default defineConfig({
   },
   integrations: [tailwind({
     applyBaseStyles: false,
-  }), sitemap(), react()]
+  }), sitemap()]
 });

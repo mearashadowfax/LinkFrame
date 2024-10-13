@@ -1,12 +1,12 @@
 import ogImageSrc from "@images/social.png";
 
 export const SITE = {
-  title: "Banners - Create Custom LinkedIn-Ready Profile Frames in Seconds",
+  title: "LinkFrame Maker — Create Custom LinkedIn-Ready Profile Frames in Seconds",
   tagline: "Personalize Your LinkedIn Profile with Custom Frames",
   description: "Stand out on LinkedIn with our easy-to-use tool for creating personalized profile image frames. Customize your frames with text, colors, and symbols to showcase your skills, support causes, and make your profile truly unique.",
   description_short: "Easily create personalized LinkedIn profile frames with text, colors, and symbols using our real-time editor.",
-  url: "https://banners.li",
-  author: "Will Gordon",
+  url: "https://link-frame.vercel.app/",
+  author: "Emil Gulamov",
 };
 
 export const SEO = {
@@ -28,8 +28,8 @@ export const SEO = {
     },
     author: {
       "@type": "Person",
-      name: "Will Gordon",
-      description: "Co-Founder at Tustin Recruiting",
+      name: "Emil Gulamov",
+      description: "Founder at sobstvennoAI",
       url: SITE.url,
     },
   },
