@@ -437,10 +437,10 @@ resetButton.addEventListener("click", () => {
   frameThickness = 50;
   startPosition = 200;
   endPosition = 45;
-  textInput = "#ONTHEHUNT";
+  textInput = "#LETSDOIT";
   fontSize = 32;
   letterSpacing = 0;
-  textPlacement = 140;
+  textPlacement = 120;
 
   elements.rotationValue.value = rotation.toString();
   elements.rotationSlider.value = rotation.toString();
