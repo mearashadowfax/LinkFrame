@@ -68,7 +68,7 @@ let offsetY = 0;
 let startPosition = 200;
 let endPosition = 50;
 let frameThickness = 50;
-let textInput = "#LETSDOIT";
+let textInput = "#ONTHEHUNT";
 let fontSize = 44;
 let letterSpacing = 0;
 let textPlacement = 130;
@@ -438,7 +438,7 @@ resetButton.addEventListener("click", () => {
   frameThickness = 50;
   startPosition = 200;
   endPosition = 50;
-  textInput = "#LETSDOIT";
+  textInput = "#ONTHEHUNT";
   fontSize = 44;
   letterSpacing = 0;
   textPlacement = 130;
@@ -661,7 +661,7 @@ function updateLetterSpacing() {
   redrawCanvas();
 }
 
-const fontSizeValues = [16, 20, 24, 32, 34, 36, 40, 44, 48, 52, 56 ];
+const fontSizeValues = [16, 20, 24, 32, 34, 36, 40, 44, 48, 52, 56];
 let currentFontSizeIndex = 7;
 
 const inputElementFontSize = document.querySelector<HTMLInputElement>(
