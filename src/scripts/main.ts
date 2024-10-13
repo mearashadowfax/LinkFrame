@@ -69,9 +69,9 @@ let startPosition = 200;
 let endPosition = 50;
 let frameThickness = 50;
 let textInput = "#LETSDOIT";
-let fontSize = 32;
+let fontSize = 44;
 let letterSpacing = 0;
-let textPlacement = 120;
+let textPlacement = 130;
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
@@ -274,12 +274,12 @@ function drawCircularArcAndText() {
   const textLength = text.length;
   const textRadius = canvas.width / 2 - arcWidth / 2;
 
-  const baseAnglePerChar = (Math.PI / textLength) * 0.5;
+  const baseAnglePerChar = (Math.PI / textLength) * 0.65;
   const anglePerChar = baseAnglePerChar + letterSpacing;
   const totalAngle = anglePerChar * textLength;
   const textColor = hexInput3.value;
 
-  ctx.font = `bold ${fontSize}px ui-sans-serif, system-ui`;
+  ctx.font = `bold ${fontSize}px ui-monospace, monospace`;
   ctx.fillStyle = textColor;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -295,6 +295,7 @@ function drawCircularArcAndText() {
     ctx.save();
     ctx.rotate(angle);
     ctx.translate(0, -textRadius);
+    ctx.scale(1.1, 1);
     ctx.rotate(Math.PI / 1);
     ctx.fillText(text[i], 0, 0);
     ctx.restore();
@@ -415,7 +416,7 @@ elements.endPositionSlider.addEventListener("input", () => {
 });
 
 frameTextInput.addEventListener("input", () => {
-  textInput = frameTextInput.value;
+  textInput = frameTextInput.value.toUpperCase();
   redrawCanvas();
 });
 
@@ -438,9 +439,9 @@ resetButton.addEventListener("click", () => {
   startPosition = 200;
   endPosition = 50;
   textInput = "#LETSDOIT";
-  fontSize = 32;
+  fontSize = 44;
   letterSpacing = 0;
-  textPlacement = 120;
+  textPlacement = 130;
 
   elements.rotationValue.value = rotation.toString();
   elements.rotationSlider.value = rotation.toString();
@@ -660,8 +661,8 @@ function updateLetterSpacing() {
   redrawCanvas();
 }
 
-const fontSizeValues = [16, 20, 24, 32, 36, 40, 48];
-let currentFontSizeIndex = 3;
+const fontSizeValues = [16, 20, 24, 32, 34, 36, 40, 44, 48, 52, 56 ];
+let currentFontSizeIndex = 7;
 
 const inputElementFontSize = document.querySelector<HTMLInputElement>(
   "[data-hs-input-font-size]"
