@@ -169,16 +169,6 @@ function redrawCanvas() {
     if (ctx && canvas) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      ctx.save();
-
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const radius = canvas.width / 2;
-
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-      ctx.clip();
-
       ctx.fillStyle = currentCanvasBackgroundColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 

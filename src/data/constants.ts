@@ -2,9 +2,9 @@ import ogImageSrc from "@images/social.png";
 
 export const SITE = {
   title: "Banners",
-  tagline: "Helping companies build exceptional teams in Orange County and beyond",
-  description: "Will Gordon is a Co-Founder at Tustin Recruiting, helping companies in the Orange County area and beyond find top talent in sales and engineering.",
-  description_short: "Co-Founder at Tustin Recruiting, helping companies find top talent.",
+  tagline: "",
+  description: "",
+  description_short: "",
   url: "https://banners.li",
   author: "Will Gordon",
 };
