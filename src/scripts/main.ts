@@ -168,7 +168,8 @@ function redrawCanvas() {
   requestAnimationFrame(() => {
     if (ctx && canvas) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
       // ctx.save();
 
       // const centerX = canvas.width / 2;
@@ -192,8 +193,7 @@ function redrawCanvas() {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
 
       drawCircularArcAndText();
-
-      // ctx.restore();
+      ctx.restore();
 
       // drawBackgroundOutsideCircle(
       //   ctx,
@@ -429,7 +429,7 @@ resetButton.addEventListener("click", () => {
   elements.endPositionValue.value = endPosition.toString();
   elements.endPositionSlider.value = endPosition.toString();
   elements.textPlacementValue.value = textPlacement.toString();
-  elements.textPlacementSlider.value= textPlacement.toString();
+  elements.textPlacementSlider.value = textPlacement.toString();
   frameTextInput.value = textInput.toString();
   redrawCanvas();
 });
