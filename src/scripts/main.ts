@@ -272,9 +272,9 @@ function drawCircularArcAndText() {
 
   const text = textInput;
   const textLength = text.length;
-  const textRadius = canvas.width / 2 - arcWidth / 2;
+  const textRadius = canvas.width / 2 - arcWidth / 2.2;
 
-  const baseAnglePerChar = (Math.PI / textLength) * 0.65;
+  const baseAnglePerChar = (Math.PI / textLength) * 0.6;
   const anglePerChar = baseAnglePerChar + letterSpacing;
   const totalAngle = anglePerChar * textLength;
   const textColor = hexInput3.value;
