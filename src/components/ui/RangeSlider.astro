@@ -24,6 +24,7 @@ interface Props {
       max={max}
       step={step}
       oninput={`document.getElementById('${secondId}').value = this.value`}
+      aria-label={title}
     />
   </div>
   <input
@@ -35,5 +36,6 @@ interface Props {
     max={max}
     step={step}
     oninput={`document.getElementById('${id}').value = this.value`}
+    aria-label=`${title} + "Slider"`
   />
 </div>

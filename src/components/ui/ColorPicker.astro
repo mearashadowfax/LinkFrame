@@ -36,15 +36,18 @@ const btnText = "Random";
       type="text"
       placeholder=""
       class="hexInput h-full w-full border-slate-200 rounded-lg pl-14 font-medium text-slate-700 focus:border-sky-500 focus:ring-sky-500"
+      aria-label=`${title} + "HEX value"`
     />
     <input
       id={colorPickerId}
       type="color"
       class="colorPicker absolute top-1/2 h-7 w-7 -translate-y-1/2 left-4 transform cursor-pointer rounded-full border-none"
+      aria-label=`${title} + "Color Picker"`
     />
     <button
       id={randomBtnId}
       class="randomBtn absolute right-2 top-1/2 flex -translate-y-1/2 transform cursor-pointer items-center gap-x-1 rounded-full py-1.5 font-medium text-slate-500"
+      aria-label="Generate Random Color"
     >
       {btnText}
       <Icon name="random" />

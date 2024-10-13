@@ -1,47 +1,22 @@
-# Astro Starter Kit: Minimal
+# Project Notes
 
-```sh
-npm create astro@latest -- --template minimal
-```
+## Assets
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+- We are using default system-ui fonts for better performance and fast loading times.
+- Icons have been added to the `favicon` folder, along with a maskable icon and a social share image in the `img` directory.
+- Scripts and styles are located in the `scripts` and `styles` directories, respectively.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Components
 
-## 🚀 Project Structure
+- `Footer`: You can make all changes in the frontmatter; the same applies to the `Hero` component.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Data
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+- `constants.ts`: Contains SEO-related data, which you can adjust as needed.
+- Frame Text: The frame text is currently set to `#ONTHEHUNT`. You may want to change this in the following locations:
+  - In `ImageCustomizer.astro` on line 83: `placeholder="#ONTHEHUNT"`
+  - In `src/scripts/main.ts` on line 73: `let textInput = "#ONTHEHUNT";`
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Root Directory
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- `astro.config.mjs`: Update the site URL if it changes, it is currently set to https://banners.li.
