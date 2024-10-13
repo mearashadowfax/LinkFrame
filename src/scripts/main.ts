@@ -169,6 +169,16 @@ function redrawCanvas() {
     if (ctx && canvas) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // ctx.save();
+
+      // const centerX = canvas.width / 2;
+      // const centerY = canvas.height / 2;
+      // const radius = canvas.width / 2;
+
+      // ctx.beginPath();
+      // ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+      // ctx.clip();
+
       ctx.fillStyle = currentCanvasBackgroundColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -183,37 +193,37 @@ function redrawCanvas() {
 
       drawCircularArcAndText();
 
-      ctx.restore();
+      // ctx.restore();
 
-      drawBackgroundOutsideCircle(
-        ctx,
-        centerX,
-        centerY,
-        radius,
-        currentCanvasBackgroundColor
-      );
+      // drawBackgroundOutsideCircle(
+      //   ctx,
+      //   centerX,
+      //   centerY,
+      //   radius,
+      //   currentCanvasBackgroundColor
+      // );
     }
   });
 }
 
-function drawBackgroundOutsideCircle(
-  ctx: CanvasRenderingContext2D,
-  centerX: number,
-  centerY: number,
-  radius: number,
-  currentCanvasBackgroundColor: string
-): void {
-  ctx.save();
+// function drawBackgroundOutsideCircle(
+//   ctx: CanvasRenderingContext2D,
+//   centerX: number,
+//   centerY: number,
+//   radius: number,
+//   currentCanvasBackgroundColor: string
+// ): void {
+//   ctx.save();
 
-  // background color outside the circle
-  ctx.beginPath();
-  ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);  // Full canvas rectangle
-  ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);   // Circle in the middle
-  ctx.fillStyle = currentCanvasBackgroundColor;       // Set background color
-  ctx.fill("evenodd"); // Fill outside the circle
+//   // background color outside the circle
+//   ctx.beginPath();
+//   ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);  // Full canvas rectangle
+//   ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);   // Circle in the middle
+//   ctx.fillStyle = currentCanvasBackgroundColor;       // Set background color
+//   ctx.fill("evenodd"); // Fill outside the circle
 
-  ctx.restore();
-}
+//   ctx.restore();
+// }
 
 function drawCircularArcAndText() {
   if (!ctx || !canvas) return;
