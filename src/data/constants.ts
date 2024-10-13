@@ -1,8 +1,8 @@
 import ogImageSrc from "@images/social.png";
 
 export const SITE = {
-  title: "LinkFrame — Create Custom LinkedIn-Ready Profile Frames in Seconds",
-  tagline: "Personalize Your LinkedIn Profile with Custom Frames",
+  title: "LinkFrame",
+  tagline: "Create Custom LinkedIn-Ready Profile Frames in Seconds",
   description: "Stand out on LinkedIn with our easy-to-use tool for creating personalized profile image frames. Customize your frames with text, colors, and symbols to showcase your skills, support causes, and make your profile truly unique.",
   description_short: "Easily create personalized LinkedIn profile frames with text, colors, and symbols using our real-time editor.",
   url: "https://link-frame.vercel.app/",
