@@ -65,13 +65,13 @@ let rotation = 0;
 let scale = 1;
 let offsetX = 0;
 let offsetY = 0;
-let startPosition = 225;
-let endPosition = 25;
+let startPosition = 200;
+let endPosition = 50;
 let frameThickness = 50;
-let textInput = "#ONTHEHUNT";
+let textInput = "#LETSDOIT";
 let fontSize = 32;
 let letterSpacing = 0;
-let textPlacement = 140;
+let textPlacement = 120;
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
@@ -274,12 +274,12 @@ function drawCircularArcAndText() {
   const textLength = text.length;
   const textRadius = canvas.width / 2 - arcWidth / 2;
 
-  const baseAnglePerChar = (Math.PI / textLength) * 0.75;
+  const baseAnglePerChar = (Math.PI / textLength) * 0.5;
   const anglePerChar = baseAnglePerChar + letterSpacing;
   const totalAngle = anglePerChar * textLength;
   const textColor = hexInput3.value;
 
-  ctx.font = `bolder ${fontSize}px Helvetica`;
+  ctx.font = `bold ${fontSize}px ui-sans-serif, system-ui`;
   ctx.fillStyle = textColor;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -304,30 +304,56 @@ function drawCircularArcAndText() {
 function enableDragging(canvas: HTMLCanvasElement) {
   canvas.style.cursor = "grab";
 
+  // Mouse events
   canvas.addEventListener("mousedown", (e) => {
-    isDragging = true;
-    dragStartX = e.offsetX - offsetX;
-    dragStartY = e.offsetY - offsetY;
-    canvas.style.cursor = "grabbing";
+    startDragging(e.offsetX, e.offsetY);
   });
 
   canvas.addEventListener("mousemove", (e) => {
     if (isDragging) {
-      offsetX = e.offsetX - dragStartX;
-      offsetY = e.offsetY - dragStartY;
-      redrawCanvas();
+      drag(e.offsetX, e.offsetY);
     }
   });
 
-  canvas.addEventListener("mouseup", () => {
-    isDragging = false;
-    canvas.style.cursor = "grab";
+  canvas.addEventListener("mouseup", () => stopDragging());
+  canvas.addEventListener("mouseleave", () => stopDragging());
+
+  // Touch events
+  canvas.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    startDragging(touch.clientX - rect.left, touch.clientY - rect.top);
   });
 
-  canvas.addEventListener("mouseleave", () => {
+  canvas.addEventListener("touchmove", (e) => {
+    if (isDragging) {
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      drag(touch.clientX - rect.left, touch.clientY - rect.top);
+    }
+    e.preventDefault();
+  });
+
+  canvas.addEventListener("touchend", () => stopDragging());
+  canvas.addEventListener("touchcancel", () => stopDragging());
+
+  function startDragging(x: number, y: number) {
+    isDragging = true;
+    dragStartX = x - offsetX;
+    dragStartY = y - offsetY;
+    canvas.style.cursor = "grabbing";
+  }
+
+  function drag(x: number, y: number) {
+    offsetX = x - dragStartX;
+    offsetY = y - dragStartY;
+    redrawCanvas();
+  }
+
+  function stopDragging() {
     isDragging = false;
     canvas.style.cursor = "grab";
-  });
+  }
 }
 
 elements.rotationValue.addEventListener("input", () => {
@@ -595,7 +621,7 @@ sections.forEach(
 
 // Letter spacing and font size adjustments
 
-const letterSpacingValues = [-0.05, -0.025, 0, 0.025, 0.05, 0.1];
+const letterSpacingValues = [-0.04, -0.025, 0, 0.025, 0.05, 0.1];
 let currentIndexLetterSpacing = 2;
 
 const inputElementLetterSpacing = document.querySelector<HTMLInputElement>(

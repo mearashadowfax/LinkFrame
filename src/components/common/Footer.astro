@@ -2,15 +2,15 @@
 const title = "Banners";
 
 const footerLinks = [
-  { title: "Link", href: "#" },
-  { title: "Link", href: "#" },
-  { title: "Link", href: "#" },
+  { title: "Hiring?", href: "https://tustinrecruiting.com/" },
+  { title: "Looking for a Job?", href: "https://tustinrecruiting.com/open-positions" },
+  { title: "By Warm Websites", href: "https://warmwebsites.com/" },
 ];
 
 const socialLinks = [
   {
     title: "LinkedIn",
-    href: "#",
+    href: "https://www.linkedin.com/in/will-gordon1/",
     svg: `<svg
           class="shrink-0 size-4"
           role="img"
@@ -24,7 +24,7 @@ const socialLinks = [
   },
   {
     title: "X",
-    href: "#",
+    href: "https://x.com/helloIamWilly",
     svg: `<svg
           class="shrink-0 size-4"
           role="img"
@@ -38,7 +38,7 @@ const socialLinks = [
   },
   {
     title: "GitHub",
-    href: "#",
+    href: "https://github.com/wcgordon1",
     svg: `<svg
           class="shrink-0 size-4"
           role="img"
@@ -53,7 +53,7 @@ const socialLinks = [
 ];
 ---
 
-<footer class="mt-10 w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
+<footer class="mt-10 w-full max-w-[85rem] pt-10 pb-16 lg:pb-10 px-4 sm:px-6 lg:px-8 mx-auto">
   <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-5">
     <div>
       <a
@@ -70,6 +70,7 @@ const socialLinks = [
             <a
               class="inline-flex transition duration-300 gap-x-2 text-slate-500 hover:text-slate-800 focus:outline-none focus:text-slate-800"
               href={link.href}
+              target="_blank"
             >
               {link.title}
             </a>
@@ -84,6 +85,7 @@ const socialLinks = [
           <a
             class="size-8 transition duration-300 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-slate-500 hover:bg-slate-50 focus:outline-none focus:bg-slate-50 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
             href={social.href}
+            target="_blank"
             aria-label={social.title}
           >
             <Fragment set:html={social.svg} />
