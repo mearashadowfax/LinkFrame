@@ -486,8 +486,10 @@ function resetUploadState() {
   container.classList.add("border-dashed", "border-slate-300");
   rotation = 0;
   scale = 1;
-  offsetX = 0;
-  offsetY = 0;
+  elements.rotationValue.value = rotation.toString();
+  elements.rotationSlider.value = rotation.toString();
+  elements.scaleValue.value = scale.toString();
+  elements.scaleSlider.value = scale.toString();
 
   if (canvas && ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
