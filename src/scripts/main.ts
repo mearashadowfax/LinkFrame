@@ -65,8 +65,8 @@ let rotation = 0;
 let scale = 1;
 let offsetX = 0;
 let offsetY = 0;
-let startPosition = 200;
-let endPosition = 50;
+let startPosition = 16;
+let endPosition = 56;
 let frameThickness = 50;
 let textInput = "#ONTHEHUNT";
 let fontSize = 44;
@@ -229,26 +229,27 @@ function drawCircularArcAndText() {
   if (!ctx || !canvas) return;
   // Frame
   const arcWidth = frameThickness;
-  const startArcAngle = (Math.PI * startPosition) / 180;
-  const endArcAngle = (Math.PI * endPosition) / 180;
-  const totalArcAngle = startArcAngle - endArcAngle;
+  let startArcAngle = (Math.PI * (startPosition / 50));
+  let endArcAngle = (Math.PI * (endPosition / 50));
+
+  if (endArcAngle < startArcAngle) {
+    endArcAngle += 2 * Math.PI;
+  }
+
+  const totalArcAngle = endArcAngle - startArcAngle;
 
   ctx.lineWidth = arcWidth;
   const steps = 250;
 
+  const colorRgb = hexToRgb(hexInput2.value);
+
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
-    const angle = startArcAngle - t * totalArcAngle;
+    const angle = startArcAngle + t * totalArcAngle;
 
-    // solid middle 80% and fade at ends
-    let opacity;
-    if (t < 0.2) {
-      opacity = t * 7;
-    } else if (t > 0.7) {
-      opacity = (1 - t) * 7;
-    } else {
-      opacity = 1;
-    }
+    let opacity = 1;
+    if (t < 0.2) opacity = t * 7;
+    else if (t > 0.7) opacity = (1 - t) * 7;
 
     ctx.beginPath();
     ctx.arc(
@@ -256,17 +257,11 @@ function drawCircularArcAndText() {
       canvas.height / 2,
       canvas.width / 2 - arcWidth / 2,
       angle,
-      angle - totalArcAngle / steps,
-      true
+      angle + totalArcAngle / steps,
+      false
     );
 
-    const color = hexInput2.value;
-    ctx.strokeStyle = rgba(
-      hexToRgb(color).r,
-      hexToRgb(color).g,
-      hexToRgb(color).b,
-      opacity
-    );
+    ctx.strokeStyle = `rgba(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b}, ${opacity})`;
     ctx.stroke();
   }
 
@@ -276,7 +271,7 @@ function drawCircularArcAndText() {
 
   const baseAnglePerChar = (Math.PI / textLength) * 0.6;
   const anglePerChar = baseAnglePerChar + letterSpacing;
-  const totalAngle = anglePerChar * textLength;
+  const totalTextAngle = anglePerChar * textLength;
   const textColor = hexInput3.value;
 
   ctx.font = `bold ${fontSize}px ui-monospace, monospace`;
@@ -286,12 +281,13 @@ function drawCircularArcAndText() {
 
   const mappedTextPlacement = (textPlacement / 100) * Math.PI - Math.PI / 2;
 
-  const startAngle = Math.PI - totalAngle / 2 + mappedTextPlacement;
+  const textStartAngle = Math.PI - totalTextAngle / 2 + mappedTextPlacement;
+
   ctx.save();
   ctx.translate(canvas.width / 2, canvas.height / 2);
 
   for (let i = 0; i < text.length; i++) {
-    const angle = startAngle - i * anglePerChar;
+    const angle = textStartAngle - i * anglePerChar;
     ctx.save();
     ctx.rotate(angle);
     ctx.translate(0, -textRadius);
@@ -300,6 +296,7 @@ function drawCircularArcAndText() {
     ctx.fillText(text[i], 0, 0);
     ctx.restore();
   }
+  ctx.restore();
 }
 // Enable dragging
 function enableDragging(canvas: HTMLCanvasElement) {
@@ -436,8 +433,8 @@ resetButton.addEventListener("click", () => {
   rotation = 0;
   scale = 1;
   frameThickness = 50;
-  startPosition = 200;
-  endPosition = 50;
+  startPosition = 16;
+  endPosition = 56;
   textInput = "#ONTHEHUNT";
   fontSize = 44;
   letterSpacing = 0;
@@ -622,8 +619,9 @@ sections.forEach(
 
 // Letter spacing and font size adjustments
 
-const letterSpacingValues = [-0.04, -0.025, 0, 0.025, 0.05, 0.1];
-let currentIndexLetterSpacing = 2;
+const letterSpacingValues = [-0.3, -0.25, -0.2, -0.15, -0.1, -0.075, -0.05, -0.025, 0, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2, 0.25, 0.3];
+
+let currentIndexLetterSpacing = 8;
 
 const inputElementLetterSpacing = document.querySelector<HTMLInputElement>(
   "[data-hs-input-letter-spacing]"
