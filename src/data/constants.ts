@@ -29,7 +29,7 @@ export const SEO = {
     author: {
       "@type": "Person",
       name: "Emil Gulamov",
-      description: "Founder at sobstvennoAI",
+      description: "Founder at gulamoff",
       url: SITE.url,
     },
   },
