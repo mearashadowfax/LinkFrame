@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@import "preline/variants.css";
+@plugin '@tailwindcss/forms';
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  .dragging {
+    @apply bg-slate-100;
+  }
+}

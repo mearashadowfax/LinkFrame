@@ -46,14 +46,10 @@
   border-radius: 50%;
 }
 
-
 canvas {
   border-radius: 9999px;
   height: 400px;
   width: 400px;
-}
-.dragging {
-  @apply bg-slate-100;
 }
 
 @media (max-width: 1280px) {
