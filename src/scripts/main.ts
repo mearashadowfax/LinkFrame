@@ -1,53 +1,151 @@
 import "@preline/tooltip/index.js";
 
+// Utility function for safe DOM element selection
+function safeGetElement<T extends HTMLElement>(
+  id: string,
+  type: string
+): T | null {
+  const element = document.getElementById(id) as T | null;
+  if (!element) {
+    console.warn(`Element with id "${id}" not found. Expected type: ${type}`);
+  }
+  return element;
+}
+
+function safeQuerySelector<T extends HTMLElement>(
+  selector: string,
+  type: string
+): T | null {
+  const element = document.querySelector<T>(selector);
+  if (!element) {
+    console.warn(
+      `Element with selector "${selector}" not found. Expected type: ${type}`
+    );
+  }
+  return element;
+}
+
 // Debouncing function for performance
-function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
-  
-  return function(...args: Parameters<T>): void {
+
+  return function (...args: Parameters<T>): void {
     const later = () => {
       timeout = null;
       func(...args);
     };
-    
+
     if (timeout !== null) {
       clearTimeout(timeout);
     }
-    
+
     timeout = setTimeout(later, wait);
   };
 }
 
 // DOM Elements
-const container = document.getElementById("imageUploadContainer") as HTMLElement;
-const imageUpload = document.getElementById("fileInput") as HTMLInputElement;
-const browseButton = document.getElementById("browseButton") as HTMLButtonElement;
-const uploadInterface = document.getElementById("uploadInterface") as HTMLElement;
-const imagePreview = document.getElementById("imagePreview") as HTMLElement;
-const progress = document.getElementById("progress") as HTMLElement;
-const controls = document.getElementById("controls") as HTMLElement;
+const container = safeGetElement<HTMLElement>(
+  "imageUploadContainer",
+  "HTMLElement"
+);
+const imageUpload = safeGetElement<HTMLInputElement>(
+  "fileInput",
+  "HTMLInputElement"
+);
+const browseButton = safeGetElement<HTMLButtonElement>(
+  "browseButton",
+  "HTMLButtonElement"
+);
+const uploadInterface = safeGetElement<HTMLElement>(
+  "uploadInterface",
+  "HTMLElement"
+);
+const imagePreview = safeGetElement<HTMLElement>("imagePreview", "HTMLElement");
+const progress = safeGetElement<HTMLElement>("progress", "HTMLElement");
+const controls = safeGetElement<HTMLElement>("controls", "HTMLElement");
 
 const elements = {
-  rotationValue: document.getElementById("rotateValue") as HTMLInputElement,
-  rotationSlider: document.getElementById("rotateSlider") as HTMLInputElement,
-  scaleValue: document.getElementById("scaleValue") as HTMLInputElement,
-  scaleSlider: document.getElementById("scaleSlider") as HTMLInputElement,
-  frameThicknessValue: document.getElementById("frameThicknessValue") as HTMLInputElement,
-  frameThicknessSlider: document.getElementById("frameThicknessSlider") as HTMLInputElement,
-  startPositionValue: document.getElementById("startPositionValue") as HTMLInputElement,
-  startPositionSlider: document.getElementById("startPositionSlider") as HTMLInputElement,
-  endPositionValue: document.getElementById("endPositionValue") as HTMLInputElement,
-  endPositionSlider: document.getElementById("endPositionSlider") as HTMLInputElement,
-  textPlacementValue: document.getElementById("textPlacementValue") as HTMLInputElement,
-  textPlacementSlider: document.getElementById("textPlacementSlider") as HTMLInputElement,
+  rotationValue: safeGetElement<HTMLInputElement>(
+    "rotateValue",
+    "HTMLInputElement"
+  ),
+  rotationSlider: safeGetElement<HTMLInputElement>(
+    "rotateSlider",
+    "HTMLInputElement"
+  ),
+  scaleValue: safeGetElement<HTMLInputElement>(
+    "scaleValue",
+    "HTMLInputElement"
+  ),
+  scaleSlider: safeGetElement<HTMLInputElement>(
+    "scaleSlider",
+    "HTMLInputElement"
+  ),
+  frameThicknessValue: safeGetElement<HTMLInputElement>(
+    "frameThicknessValue",
+    "HTMLInputElement"
+  ),
+  frameThicknessSlider: safeGetElement<HTMLInputElement>(
+    "frameThicknessSlider",
+    "HTMLInputElement"
+  ),
+  startPositionValue: safeGetElement<HTMLInputElement>(
+    "startPositionValue",
+    "HTMLInputElement"
+  ),
+  startPositionSlider: safeGetElement<HTMLInputElement>(
+    "startPositionSlider",
+    "HTMLInputElement"
+  ),
+  endPositionValue: safeGetElement<HTMLInputElement>(
+    "endPositionValue",
+    "HTMLInputElement"
+  ),
+  endPositionSlider: safeGetElement<HTMLInputElement>(
+    "endPositionSlider",
+    "HTMLInputElement"
+  ),
+  textPlacementValue: safeGetElement<HTMLInputElement>(
+    "textPlacementValue",
+    "HTMLInputElement"
+  ),
+  textPlacementSlider: safeGetElement<HTMLInputElement>(
+    "textPlacementSlider",
+    "HTMLInputElement"
+  ),
 };
 
-const resetButton = document.getElementById("resetButton") as HTMLButtonElement;
-const startOverButton = document.getElementById("startOverButton") as HTMLButtonElement;
-const downloadButton = document.getElementById("downloadButton") as HTMLButtonElement;
-const frameTextInput = document.getElementById("frameTextInput") as HTMLInputElement;
-const hexInput2 = document.getElementById("hexInput2") as HTMLInputElement;
-const hexInput3 = document.getElementById("hexInput3") as HTMLInputElement;
+const resetButton = safeGetElement<HTMLButtonElement>(
+  "resetButton",
+  "HTMLButtonElement"
+);
+const startOverButton = safeGetElement<HTMLButtonElement>(
+  "startOverButton",
+  "HTMLButtonElement"
+);
+const downloadButton = safeGetElement<HTMLButtonElement>(
+  "downloadButton",
+  "HTMLButtonElement"
+);
+const frameTextInput = safeGetElement<HTMLInputElement>(
+  "frameTextInput",
+  "HTMLInputElement"
+);
+const hexInput1 = safeGetElement<HTMLInputElement>(
+  "hexInput1",
+  "HTMLInputElement"
+);
+const hexInput2 = safeGetElement<HTMLInputElement>(
+  "hexInput2",
+  "HTMLInputElement"
+);
+const hexInput3 = safeGetElement<HTMLInputElement>(
+  "hexInput3",
+  "HTMLInputElement"
+);
 
 // State variables
 let canvas: HTMLCanvasElement | null = null;
@@ -74,19 +172,23 @@ const debouncedRedraw = debounce(redrawCanvas, 50);
 
 // Event handling functions
 function handleBrowseClick() {
+  if (!imageUpload) return;
   imageUpload.click();
 }
 
 function handleDragEnter() {
+  if (!container) return;
   container.classList.add("dragging");
 }
 
 function handleDragOver(e: DragEvent) {
   e.preventDefault();
+  if (!container) return;
   container.classList.add("dragging");
 }
 
 function handleDragLeave() {
+  if (!container) return;
   container.classList.remove("dragging");
 }
 
@@ -95,7 +197,9 @@ function handleDrop(e: DragEvent) {
   const files = e.dataTransfer?.files;
   if (files && files.length > 0) {
     handleFileUpload({ target: { files: [files[0]] } } as unknown as Event);
-    container.classList.remove("dragging");
+    if (container) {
+      container.classList.remove("dragging");
+    }
   }
 }
 
@@ -113,6 +217,11 @@ function handleFileUpload(event: Event) {
     return;
   }
 
+  if (!progress || !uploadInterface || !controls || !imagePreview) {
+    console.error("Required DOM elements not found");
+    return;
+  }
+
   progress.classList.add("flex");
   progress.classList.remove("hidden");
   uploadInterface.classList.add("hidden");
@@ -126,9 +235,11 @@ function handleFileUpload(event: Event) {
     ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     enableDragging(canvas);
   }
-  
+
   displayImagePreview(file);
-  imageUpload.value = "";
+  if (imageUpload) {
+    imageUpload.value = "";
+  }
 }
 
 function displayImagePreview(file: File) {
@@ -136,30 +247,41 @@ function displayImagePreview(file: File) {
 
   reader.onload = (e) => {
     const result = e.target?.result;
-    if (typeof result !== 'string') return;
-    
+    if (typeof result !== "string") return;
+
     image = new Image();
     image.onload = () => {
       if (!canvas) return;
-      
+
       canvas.width = 400;
       canvas.height = 400;
 
       redrawCanvas();
-      progress.classList.add("hidden");
-      imagePreview.classList.remove("hidden");
-      uploadInterface.classList.add("hidden");
-      container.classList.remove("border-dashed");
-      container.classList.add("border-solid");
-      controls.classList.remove("hidden");
-      controls.classList.add("flex");
+
+      if (progress) {
+        progress.classList.add("hidden");
+      }
+      if (imagePreview) {
+        imagePreview.classList.remove("hidden");
+      }
+      if (uploadInterface) {
+        uploadInterface.classList.add("hidden");
+      }
+      if (container) {
+        container.classList.remove("border-dashed");
+        container.classList.add("border-solid");
+      }
+      if (controls) {
+        controls.classList.remove("hidden");
+        controls.classList.add("flex");
+      }
     };
-    
+
     image.onerror = () => {
       alert("Failed to load image. Please try another file.");
       resetUploadState();
     };
-    
+
     image.src = result;
   };
 
@@ -174,11 +296,14 @@ function displayImagePreview(file: File) {
 // Improved color management functions
 function hexToRgb(hex: string) {
   // Remove # if present
-  hex = hex.replace(/^#/, '');
-  
+  hex = hex.replace(/^#/, "");
+
   // Handle shorthand hex (#RGB)
   if (hex.length === 3) {
-    hex = hex.split('').map(h => h + h).join('');
+    hex = hex
+      .split("")
+      .map((h) => h + h)
+      .join("");
   }
 
   // Validate hex format
@@ -191,7 +316,7 @@ function hexToRgb(hex: string) {
   const r = (bigint >> 16) & 255;
   const g = (bigint >> 8) & 255;
   const b = bigint & 255;
-  
+
   return { r, g, b };
 }
 
@@ -226,7 +351,7 @@ function applyBackground() {
 
 function drawImage() {
   if (!ctx || !canvas) return;
-  
+
   ctx.save();
   ctx.translate(canvas.width / 2 + offsetX, canvas.height / 2 + offsetY);
   ctx.rotate((rotation * Math.PI) / 180);
@@ -237,12 +362,12 @@ function drawImage() {
 }
 
 function drawCircularArcAndText() {
-  if (!ctx || !canvas) return;
-  
+  if (!ctx || !canvas || !hexInput2) return;
+
   // Frame
   const arcWidth = frameThickness;
-  let startArcAngle = (Math.PI * (startPosition / 50));
-  let endArcAngle = (Math.PI * (endPosition / 50));
+  let startArcAngle = Math.PI * (startPosition / 50);
+  let endArcAngle = Math.PI * (endPosition / 50);
 
   if (endArcAngle < startArcAngle) {
     endArcAngle += 2 * Math.PI;
@@ -281,8 +406,8 @@ function drawCircularArcAndText() {
 }
 
 function drawCircularText() {
-  if (!ctx || !canvas) return;
-  
+  if (!ctx || !canvas || !hexInput3) return;
+
   const text = textInput;
   const textLength = text.length;
   const textRadius = canvas.width / 2 - frameThickness / 2.2;
@@ -313,7 +438,7 @@ function drawCircularText() {
     ctx.fillText(text[i], 0, 0);
     ctx.restore();
   }
-  
+
   ctx.restore();
 }
 
@@ -325,35 +450,35 @@ function enableDragging(canvas: HTMLCanvasElement) {
   function handleMouseDown(e: MouseEvent) {
     startDragging(e.offsetX, e.offsetY);
   }
-  
+
   function handleMouseMove(e: MouseEvent) {
     if (isDragging) {
       drag(e.offsetX, e.offsetY);
     }
   }
-  
+
   function handleMouseUp() {
     stopDragging();
   }
-  
+
   function handleTouchStart(e: TouchEvent) {
     if (e.touches.length !== 1) return;
-    
+
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
     startDragging(touch.clientX - rect.left, touch.clientY - rect.top);
     e.preventDefault();
   }
-  
+
   function handleTouchMove(e: TouchEvent) {
     if (!isDragging || e.touches.length !== 1) return;
-    
+
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
     drag(touch.clientX - rect.left, touch.clientY - rect.top);
     e.preventDefault();
   }
-  
+
   function handleTouchEnd() {
     stopDragging();
   }
@@ -381,7 +506,7 @@ function enableDragging(canvas: HTMLCanvasElement) {
 
 function startDragging(x: number, y: number) {
   if (!canvas) return;
-  
+
   isDragging = true;
   dragStartX = x - offsetX;
   dragStartY = y - offsetY;
@@ -396,34 +521,41 @@ function drag(x: number, y: number) {
 
 function stopDragging() {
   if (!canvas) return;
-  
+
   isDragging = false;
   canvas.style.cursor = "grab";
 }
 
-// Setup slider and input pairs
+// Enhanced setupSliderAndInput with null checks
 function setupSliderAndInput(
-  slider: HTMLInputElement,
-  input: HTMLInputElement,
+  slider: HTMLInputElement | null,
+  input: HTMLInputElement | null,
   updateFn: (value: number) => void
 ) {
+  if (!slider || !input) {
+    console.warn("Slider or input element not found, skipping setup");
+    return { handleSliderInput: null, handleInputChange: null };
+  }
+
   function handleSliderInput() {
+    if (!slider || !input) return;
     const value = parseFloat(slider.value);
     input.value = value.toString();
     updateFn(value);
     debouncedRedraw();
   }
-  
+
   function handleInputChange() {
+    if (!slider || !input) return;
     const value = parseFloat(input.value);
     slider.value = value.toString();
     updateFn(value);
     redrawCanvas();
   }
-  
+
   slider.addEventListener("input", handleSliderInput);
   input.addEventListener("input", handleInputChange);
-  
+
   return { handleSliderInput, handleInputChange };
 }
 
@@ -439,20 +571,30 @@ function resetControls() {
   letterSpacing = 0;
   textPlacement = 130;
 
-  elements.rotationValue.value = rotation.toString();
-  elements.rotationSlider.value = rotation.toString();
-  elements.scaleValue.value = scale.toString();
-  elements.scaleSlider.value = scale.toString();
-  elements.frameThicknessValue.value = frameThickness.toString();
-  elements.frameThicknessSlider.value = frameThickness.toString();
-  elements.startPositionValue.value = startPosition.toString();
-  elements.startPositionSlider.value = startPosition.toString();
-  elements.endPositionValue.value = endPosition.toString();
-  elements.endPositionSlider.value = endPosition.toString();
-  elements.textPlacementValue.value = textPlacement.toString();
-  elements.textPlacementSlider.value = textPlacement.toString();
-  frameTextInput.value = textInput;
-  
+  if (elements.rotationValue)
+    elements.rotationValue.value = rotation.toString();
+  if (elements.rotationSlider)
+    elements.rotationSlider.value = rotation.toString();
+  if (elements.scaleValue) elements.scaleValue.value = scale.toString();
+  if (elements.scaleSlider) elements.scaleSlider.value = scale.toString();
+  if (elements.frameThicknessValue)
+    elements.frameThicknessValue.value = frameThickness.toString();
+  if (elements.frameThicknessSlider)
+    elements.frameThicknessSlider.value = frameThickness.toString();
+  if (elements.startPositionValue)
+    elements.startPositionValue.value = startPosition.toString();
+  if (elements.startPositionSlider)
+    elements.startPositionSlider.value = startPosition.toString();
+  if (elements.endPositionValue)
+    elements.endPositionValue.value = endPosition.toString();
+  if (elements.endPositionSlider)
+    elements.endPositionSlider.value = endPosition.toString();
+  if (elements.textPlacementValue)
+    elements.textPlacementValue.value = textPlacement.toString();
+  if (elements.textPlacementSlider)
+    elements.textPlacementSlider.value = textPlacement.toString();
+  if (frameTextInput) frameTextInput.value = textInput;
+
   redrawCanvas();
 }
 
@@ -460,13 +602,15 @@ function handleStartOver() {
   resetUploadState();
   // Delay the click event to ensure state is reset before opening file dialog
   setTimeout(() => {
-    imageUpload.click();
+    if (imageUpload) {
+      imageUpload.click();
+    }
   }, 0);
 }
 
 function handleDownload() {
   if (!canvas) return;
-  
+
   try {
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png");
@@ -479,23 +623,35 @@ function handleDownload() {
 }
 
 function resetUploadState() {
-  imageUpload.value = "";
+  if (imageUpload) {
+    imageUpload.value = "";
+  }
   image = new Image();
   offsetX = 0;
   offsetY = 0;
-  
-  imagePreview.classList.add("hidden");
-  uploadInterface.classList.remove("hidden");
-  controls.classList.add("hidden");
-  progress.classList.add("hidden");
-  container.classList.remove("border-solid", "border-slate-100");
-  container.classList.add("border-dashed", "border-slate-300");
-  
+
+  if (imagePreview) {
+    imagePreview.classList.add("hidden");
+  }
+  if (uploadInterface) {
+    uploadInterface.classList.remove("hidden");
+  }
+  if (controls) {
+    controls.classList.add("hidden");
+  }
+  if (progress) {
+    progress.classList.add("hidden");
+  }
+  if (container) {
+    container.classList.remove("border-solid", "border-slate-100");
+    container.classList.add("border-dashed", "border-slate-300");
+  }
+
   resetControls();
 
   if (canvas && ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     // Clean up event listeners
     const handlers = (canvas as any)._eventHandlers || {};
     if (handlers.handleMouseDown) {
@@ -508,12 +664,12 @@ function resetUploadState() {
       canvas.removeEventListener("touchend", handlers.handleTouchEnd);
       canvas.removeEventListener("touchcancel", handlers.handleTouchEnd);
     }
-    
+
     // Remove the canvas element
     if (canvas.parentNode) {
       canvas.parentNode.removeChild(canvas);
     }
-    
+
     canvas = null;
     ctx = null;
   }
@@ -542,10 +698,14 @@ function setColor(section: ColorSection, color: string) {
   if (section.isForCanvas) {
     setCanvasBackgroundColor(color);
   } else if (section.isForFrame) {
-    hexInput2.value = color;
+    if (hexInput2) {
+      hexInput2.value = color;
+    }
     redrawCanvas();
   } else if (section.isForText) {
-    hexInput3.value = color;
+    if (hexInput3) {
+      hexInput3.value = color;
+    }
     redrawCanvas();
   }
 }
@@ -562,14 +722,14 @@ function attachEventListenersToSection(section: ColorSection) {
     const randomColor = getRandomColor();
     setColor(section, randomColor);
   }
-  
+
   function handleHexInput(e: Event) {
     const value = (e.target as HTMLInputElement).value;
     if (/^#[0-9A-F]{6}$/i.test(value)) {
       setColor(section, value);
     }
   }
-  
+
   function handleColorPicker(e: Event) {
     const color = (e.target as HTMLInputElement).value;
     setColor(section, color);
@@ -578,22 +738,40 @@ function attachEventListenersToSection(section: ColorSection) {
   section.randomBtn.addEventListener("click", handleRandomClick);
   section.hexInput.addEventListener("input", handleHexInput);
   section.colorPicker.addEventListener("input", handleColorPicker);
-  
+
   // Store the handlers for cleanup
   (section as any)._eventHandlers = {
     handleRandomClick,
     handleHexInput,
-    handleColorPicker
+    handleColorPicker,
   };
 }
 
 // Letter spacing and font size controls
-const letterSpacingValues = [-0.3, -0.25, -0.2, -0.15, -0.1, -0.075, -0.05, -0.025, 0, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2, 0.25, 0.3];
+const letterSpacingValues = [
+  -0.3, -0.25, -0.2, -0.15, -0.1, -0.075, -0.05, -0.025, 0, 0.025, 0.05, 0.075,
+  0.1, 0.15, 0.2, 0.25, 0.3,
+];
 let currentIndexLetterSpacing = 8;
 
-const inputElementLetterSpacing = document.querySelector<HTMLInputElement>("[data-hs-input-letter-spacing]");
-const decreaseButtonLetterSpacing = document.querySelector<HTMLButtonElement>("[data-hs-input-letter-spacing-decrement]");
-const increaseButtonLetterSpacing = document.querySelector<HTMLButtonElement>("[data-hs-input-letter-spacing-increment]");
+const inputElementLetterSpacing = document.querySelector<HTMLInputElement>(
+  "[data-hs-input-letter-spacing]"
+);
+const decreaseButtonLetterSpacing = document.querySelector<HTMLButtonElement>(
+  "[data-hs-input-letter-spacing-decrement]"
+);
+const increaseButtonLetterSpacing = document.querySelector<HTMLButtonElement>(
+  "[data-hs-input-letter-spacing-increment]"
+);
+
+// Named functions for proper event listener cleanup
+function handleIncreaseLetterSpacing() {
+  adjustSpacing("increase");
+}
+
+function handleDecreaseLetterSpacing() {
+  adjustSpacing("decrease");
+}
 
 function adjustSpacing(action: "increase" | "decrease") {
   const increment = action === "increase" ? 1 : -1;
@@ -618,9 +796,24 @@ function updateLetterSpacing() {
 const fontSizeValues = [16, 20, 24, 32, 34, 36, 40, 44, 48, 52, 56];
 let currentFontSizeIndex = 7;
 
-const inputElementFontSize = document.querySelector<HTMLInputElement>("[data-hs-input-font-size]");
-const decreaseButtonFontSize = document.querySelector<HTMLButtonElement>("[data-hs-input-font-size-decrement]");
-const increaseButtonFontSize = document.querySelector<HTMLButtonElement>("[data-hs-input-font-size-increment]");
+const inputElementFontSize = document.querySelector<HTMLInputElement>(
+  "[data-hs-input-font-size]"
+);
+const decreaseButtonFontSize = document.querySelector<HTMLButtonElement>(
+  "[data-hs-input-font-size-decrement]"
+);
+const increaseButtonFontSize = document.querySelector<HTMLButtonElement>(
+  "[data-hs-input-font-size-increment]"
+);
+
+// Named functions for proper event listener cleanup
+function handleIncreaseFontSize() {
+  adjustFontSize("increase");
+}
+
+function handleDecreaseFontSize() {
+  adjustFontSize("decrease");
+}
 
 function adjustFontSize(action: "increase" | "decrease") {
   const increment = action === "increase" ? 1 : -1;
@@ -640,13 +833,18 @@ function updateFontSize() {
 }
 
 // Scroll to top functionality for mobile
-const btnToTop = document.getElementById("btnToTop") as HTMLButtonElement | null;
+const btnToTop = document.getElementById(
+  "btnToTop"
+) as HTMLButtonElement | null;
 const isMobile: boolean = window.innerWidth < 1024;
 
 function scrollFunction() {
   if (!btnToTop) return;
 
-  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+  if (
+    document.body.scrollTop > 200 ||
+    document.documentElement.scrollTop > 200
+  ) {
     btnToTop.classList.remove("scale-0", "opacity-0");
     btnToTop.classList.add("scale-100", "opacity-100");
   } else {
@@ -662,55 +860,131 @@ function topFunction() {
 
 // Initialize the application
 function initApp() {
+  // Check for critical DOM elements
+  const criticalElements = [
+    { element: container, name: "container" },
+    { element: imageUpload, name: "imageUpload" },
+    { element: browseButton, name: "browseButton" },
+    { element: uploadInterface, name: "uploadInterface" },
+    { element: imagePreview, name: "imagePreview" },
+    { element: progress, name: "progress" },
+    { element: controls, name: "controls" },
+  ];
+
+  const missingElements = criticalElements.filter(({ element }) => !element);
+  if (missingElements.length > 0) {
+    console.error(
+      "Critical DOM elements missing:",
+      missingElements.map(({ name }) => name)
+    );
+    return; // Exit early if critical elements are missing
+  }
+
   // Set initial values
   if (inputElementLetterSpacing) {
-    inputElementLetterSpacing.value = letterSpacingValues[currentIndexLetterSpacing].toString();
+    inputElementLetterSpacing.value =
+      letterSpacingValues[currentIndexLetterSpacing].toString();
   }
-  
+
   if (inputElementFontSize) {
-    inputElementFontSize.value = fontSizeValues[currentFontSizeIndex].toString();
+    inputElementFontSize.value =
+      fontSizeValues[currentFontSizeIndex].toString();
   }
-  
-  // Attach event listeners
-  browseButton.addEventListener("click", handleBrowseClick);
-  imageUpload.addEventListener("change", handleFileUpload);
-  
+
+  // Attach event listeners with null checks
+  if (browseButton) {
+    browseButton.addEventListener("click", handleBrowseClick);
+  }
+  if (imageUpload) {
+    imageUpload.addEventListener("change", handleFileUpload);
+  }
+
   // Drag-and-drop listeners
-  container.addEventListener("dragenter", handleDragEnter);
-  container.addEventListener("dragover", handleDragOver);
-  container.addEventListener("dragleave", handleDragLeave);
-  container.addEventListener("drop", handleDrop);
-  
+  if (container) {
+    container.addEventListener("dragenter", handleDragEnter);
+    container.addEventListener("dragover", handleDragOver);
+    container.addEventListener("dragleave", handleDragLeave);
+    container.addEventListener("drop", handleDrop);
+  }
+
   // Setup slider and input pairs
-  setupSliderAndInput(elements.rotationSlider, elements.rotationValue, value => { rotation = value; });
-  setupSliderAndInput(elements.scaleSlider, elements.scaleValue, value => { scale = value; });
-  setupSliderAndInput(elements.frameThicknessSlider, elements.frameThicknessValue, value => { frameThickness = value; });
-  setupSliderAndInput(elements.startPositionSlider, elements.startPositionValue, value => { startPosition = value; });
-  setupSliderAndInput(elements.endPositionSlider, elements.endPositionValue, value => { endPosition = value; });
-  setupSliderAndInput(elements.textPlacementSlider, elements.textPlacementValue, value => { textPlacement = value; });
-  
-  // Text input
-  frameTextInput.addEventListener("input", () => {
-    textInput = frameTextInput.value.toUpperCase();
-    redrawCanvas();
+  setupSliderAndInput(
+    elements.rotationSlider,
+    elements.rotationValue,
+    (value) => {
+      rotation = value;
+    }
+  );
+  setupSliderAndInput(elements.scaleSlider, elements.scaleValue, (value) => {
+    scale = value;
   });
-  
+  setupSliderAndInput(
+    elements.frameThicknessSlider,
+    elements.frameThicknessValue,
+    (value) => {
+      frameThickness = value;
+    }
+  );
+  setupSliderAndInput(
+    elements.startPositionSlider,
+    elements.startPositionValue,
+    (value) => {
+      startPosition = value;
+    }
+  );
+  setupSliderAndInput(
+    elements.endPositionSlider,
+    elements.endPositionValue,
+    (value) => {
+      endPosition = value;
+    }
+  );
+  setupSliderAndInput(
+    elements.textPlacementSlider,
+    elements.textPlacementValue,
+    (value) => {
+      textPlacement = value;
+    }
+  );
+
+  // Text input
+  if (frameTextInput) {
+    frameTextInput.addEventListener("input", () => {
+      if (frameTextInput) {
+        textInput = frameTextInput.value.toUpperCase();
+        redrawCanvas();
+      }
+    });
+  }
+
   // Button listeners
-  resetButton.addEventListener("click", resetControls);
-  startOverButton.addEventListener("click", handleStartOver);
-  downloadButton.addEventListener("click", handleDownload);
-  
+  if (resetButton) {
+    resetButton.addEventListener("click", resetControls);
+  }
+  if (startOverButton) {
+    startOverButton.addEventListener("click", handleStartOver);
+  }
+  if (downloadButton) {
+    downloadButton.addEventListener("click", handleDownload);
+  }
+
   // Letter spacing and font size controls
   if (decreaseButtonLetterSpacing && increaseButtonLetterSpacing) {
-    increaseButtonLetterSpacing.addEventListener("click", () => adjustSpacing("increase"));
-    decreaseButtonLetterSpacing.addEventListener("click", () => adjustSpacing("decrease"));
+    increaseButtonLetterSpacing.addEventListener(
+      "click",
+      handleIncreaseLetterSpacing
+    );
+    decreaseButtonLetterSpacing.addEventListener(
+      "click",
+      handleDecreaseLetterSpacing
+    );
   }
-  
+
   if (decreaseButtonFontSize && increaseButtonFontSize) {
-    increaseButtonFontSize.addEventListener("click", () => adjustFontSize("increase"));
-    decreaseButtonFontSize.addEventListener("click", () => adjustFontSize("decrease"));
+    increaseButtonFontSize.addEventListener("click", handleIncreaseFontSize);
+    decreaseButtonFontSize.addEventListener("click", handleDecreaseFontSize);
   }
-  
+
   // Initialize color sections
   const sections = [
     {
@@ -739,27 +1013,45 @@ function initApp() {
     },
   ];
 
-  sections.forEach(({ hexInputId, colorPickerId, randomBtnId, isForCanvas, isForFrame, isForText }) => {
-    const hexInput = document.getElementById(hexInputId) as HTMLInputElement;
-    const colorPicker = document.getElementById(colorPickerId) as HTMLInputElement;
-    const randomBtn = document.getElementById(randomBtnId) as HTMLButtonElement;
+  sections.forEach(
+    ({
+      hexInputId,
+      colorPickerId,
+      randomBtnId,
+      isForCanvas,
+      isForFrame,
+      isForText,
+    }) => {
+      const hexInput = safeGetElement<HTMLInputElement>(
+        hexInputId,
+        "HTMLInputElement"
+      );
+      const colorPicker = safeGetElement<HTMLInputElement>(
+        colorPickerId,
+        "HTMLInputElement"
+      );
+      const randomBtn = safeGetElement<HTMLButtonElement>(
+        randomBtnId,
+        "HTMLButtonElement"
+      );
 
-    if (hexInput && colorPicker && randomBtn) {
-      const section: ColorSection = {
-        hexInput,
-        colorPicker,
-        randomBtn,
-        isForCanvas,
-        isForFrame,
-        isForText,
-      };
+      if (hexInput && colorPicker && randomBtn) {
+        const section: ColorSection = {
+          hexInput,
+          colorPicker,
+          randomBtn,
+          isForCanvas,
+          isForFrame,
+          isForText,
+        };
 
-      const randomColor = getRandomColor();
-      setColor(section, randomColor);
-      attachEventListenersToSection(section);
+        const randomColor = getRandomColor();
+        setColor(section, randomColor);
+        attachEventListenersToSection(section);
+      }
     }
-  });
-  
+  );
+
   // Set up scroll to top for mobile
   if (isMobile && btnToTop) {
     window.onscroll = scrollFunction;
@@ -772,40 +1064,274 @@ document.addEventListener("DOMContentLoaded", initApp);
 
 // Clean up function for when the component is destroyed or page is unloaded
 function cleanup() {
-  // Remove all event listeners
-  browseButton.removeEventListener("click", handleBrowseClick);
-  imageUpload.removeEventListener("change", handleFileUpload);
-  
-  container.removeEventListener("dragenter", handleDragEnter);
-  container.removeEventListener("dragover", handleDragOver);
-  container.removeEventListener("dragleave", handleDragLeave);
-  container.removeEventListener("drop", handleDrop);
-  
-  resetButton.removeEventListener("click", resetControls);
-  startOverButton.removeEventListener("click", handleStartOver);
-  downloadButton.removeEventListener("click", handleDownload);
-  
+  // Remove all event listeners with null checks
+  if (browseButton) {
+    browseButton.removeEventListener("click", handleBrowseClick);
+  }
+  if (imageUpload) {
+    imageUpload.removeEventListener("change", handleFileUpload);
+  }
+
+  if (container) {
+    container.removeEventListener("dragenter", handleDragEnter);
+    container.removeEventListener("dragover", handleDragOver);
+    container.removeEventListener("dragleave", handleDragLeave);
+    container.removeEventListener("drop", handleDrop);
+  }
+
+  if (resetButton) {
+    resetButton.removeEventListener("click", resetControls);
+  }
+  if (startOverButton) {
+    startOverButton.removeEventListener("click", handleStartOver);
+  }
+  if (downloadButton) {
+    downloadButton.removeEventListener("click", handleDownload);
+  }
+
   if (decreaseButtonLetterSpacing && increaseButtonLetterSpacing) {
-    increaseButtonLetterSpacing.removeEventListener("click", () => adjustSpacing("increase"));
-    decreaseButtonLetterSpacing.removeEventListener("click", () => adjustSpacing("decrease"));
+    increaseButtonLetterSpacing.removeEventListener(
+      "click",
+      handleIncreaseLetterSpacing
+    );
+    decreaseButtonLetterSpacing.removeEventListener(
+      "click",
+      handleDecreaseLetterSpacing
+    );
   }
-  
+
   if (decreaseButtonFontSize && increaseButtonFontSize) {
-    increaseButtonFontSize.removeEventListener("click", () => adjustFontSize("increase"));
-    decreaseButtonFontSize.removeEventListener("click", () => adjustFontSize("decrease"));
+    increaseButtonFontSize.removeEventListener("click", handleIncreaseFontSize);
+    decreaseButtonFontSize.removeEventListener("click", handleDecreaseFontSize);
   }
-  
+
   // Clean up canvas if it exists
   if (canvas) {
     resetUploadState();
   }
-  
+
   // Remove window scroll handler if it exists
   if (isMobile) {
     window.onscroll = null;
-    btnToTop?.removeEventListener("click", topFunction);
+    if (btnToTop) {
+      btnToTop.removeEventListener("click", topFunction);
+    }
   }
 }
 
 // Add unload listener to clean up on page unload
 window.addEventListener("beforeunload", cleanup);
+
+// Input validation functions
+function validateHexColor(hex: string): boolean {
+  if (!hex || typeof hex !== "string") return false;
+
+  // Remove # if present
+  const cleanHex = hex.replace(/^#/, "");
+
+  // Check if it's a valid hex color (3 or 6 characters, only hex digits)
+  return /^[0-9A-Fa-f]{3}$|^[0-9A-Fa-f]{6}$/.test(cleanHex);
+}
+
+function validateNumericInput(
+  value: string,
+  min: number,
+  max: number
+): boolean {
+  const num = parseFloat(value);
+  return !isNaN(num) && num >= min && num <= max;
+}
+
+function sanitizeTextInput(input: string): string {
+  if (!input || typeof input !== "string") return "";
+
+  // Remove potentially harmful characters and limit length
+  return input
+    .replace(/[<>"/\\&]/g, "")
+    .substring(0, 100)
+    .toUpperCase();
+}
+
+// Error boundary wrapper for critical functions
+function withErrorBoundary<T extends (...args: any[]) => any>(
+  fn: T,
+  fallback?: () => void,
+  errorMessage?: string
+): T {
+  return ((...args: Parameters<T>) => {
+    try {
+      return fn(...args);
+    } catch (error) {
+      console.error(errorMessage || `Error in ${fn.name}:`, error);
+      if (fallback) {
+        fallback();
+      }
+      return undefined;
+    }
+  }) as T;
+}
+
+// Enhanced color management with validation
+function setColorWithValidation(section: ColorSection, color: string) {
+  if (!validateHexColor(color)) {
+    console.warn(`Invalid hex color: ${color}, using default`);
+    color = getRandomColor();
+  }
+
+  // Ensure color starts with #
+  if (!color.startsWith("#")) {
+    color = "#" + color;
+  }
+
+  setColor(section, color);
+}
+
+// Enhanced text input handler with validation
+function handleTextInputWithValidation(input: HTMLInputElement) {
+  if (!input) return;
+
+  const sanitizedValue = sanitizeTextInput(input.value);
+  if (sanitizedValue !== input.value) {
+    input.value = sanitizedValue;
+  }
+
+  textInput = sanitizedValue || "#ONTHEHUNT";
+  redrawCanvas();
+}
+
+// Loading state management
+function showLoadingState(message: string = "Processing...") {
+  if (progress) {
+    progress.classList.add("flex");
+    progress.classList.remove("hidden");
+
+    // Add loading message if element exists
+    const loadingText = progress.querySelector(".loading-text");
+    if (loadingText) {
+      loadingText.textContent = message;
+    }
+  }
+}
+
+function hideLoadingState() {
+  if (progress) {
+    progress.classList.add("hidden");
+    progress.classList.remove("flex");
+  }
+}
+
+// Enhanced file upload with better error handling and loading states
+const enhancedHandleFileUpload = withErrorBoundary(
+  function (event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const file = files[0];
+
+    // Enhanced file validation
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload a valid image file (JPG, PNG, GIF, etc.).");
+      return;
+    }
+
+    // Check file size (limit to 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert("File size too large. Please upload an image smaller than 10MB.");
+      return;
+    }
+
+    if (!progress || !uploadInterface || !controls || !imagePreview) {
+      console.error("Required DOM elements not found");
+      return;
+    }
+
+    showLoadingState("Uploading image...");
+    uploadInterface.classList.add("hidden");
+    controls.classList.add("hidden");
+
+    if (!canvas) {
+      canvas = document.createElement("canvas");
+      canvas.id = "canvas";
+      canvas.className = "border border-slate-300";
+      imagePreview.appendChild(canvas);
+      ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+      enableDragging(canvas);
+    }
+
+    displayImagePreview(file);
+    if (imageUpload) {
+      imageUpload.value = "";
+    }
+  },
+  () => {
+    hideLoadingState();
+    alert("An error occurred while uploading the image. Please try again.");
+  },
+  "Enhanced file upload error"
+);
+
+// Enhanced image preview with loading states
+const enhancedDisplayImagePreview = withErrorBoundary(
+  function (file: File) {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const result = e.target?.result;
+      if (typeof result !== "string") return;
+
+      showLoadingState("Processing image...");
+
+      image = new Image();
+      image.onload = () => {
+        if (!canvas) return;
+
+        canvas.width = 400;
+        canvas.height = 400;
+
+        redrawCanvas();
+
+        hideLoadingState();
+
+        if (imagePreview) {
+          imagePreview.classList.remove("hidden");
+        }
+        if (uploadInterface) {
+          uploadInterface.classList.add("hidden");
+        }
+        if (container) {
+          container.classList.remove("border-dashed");
+          container.classList.add("border-solid");
+        }
+        if (controls) {
+          controls.classList.remove("hidden");
+          controls.classList.add("flex");
+        }
+      };
+
+      image.onerror = () => {
+        hideLoadingState();
+        alert("Failed to load image. Please try another file.");
+        resetUploadState();
+      };
+
+      image.src = result;
+    };
+
+    reader.onerror = () => {
+      hideLoadingState();
+      alert("Error reading file. Please try again.");
+      resetUploadState();
+    };
+
+    reader.readAsDataURL(file);
+  },
+  () => {
+    hideLoadingState();
+    alert("An error occurred while processing the image. Please try again.");
+  },
+  "Enhanced image preview error"
+);
