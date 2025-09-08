@@ -18,7 +18,7 @@
     "astro": "^5.13.5",
     "preline": "^3.2.3",
     "sharp-ico": "^0.1.5",
-    "tailwindcss": "^4.1.12",
+    "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2"
   },
   "devDependencies": {
