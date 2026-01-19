@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
-    "@astrojs/sitemap": "^3.6.1",
+    "@astrojs/sitemap": "^3.7.0",
     "@floating-ui/dom": "^1.7.4",
     "@preline/tooltip": "^3.2.3",
     "@tailwindcss/vite": "^4.1.18",
