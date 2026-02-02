@@ -16,7 +16,7 @@
     "@preline/tooltip": "^4.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
-    "preline": "^3.2.3",
+    "preline": "^4.0.1",
     "sharp": "^0.34.5",
     "sharp-ico": "^0.1.5",
     "tailwindcss": "^4.1.18",
