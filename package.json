@@ -14,7 +14,7 @@
     "@astrojs/sitemap": "^3.7.0",
     "@floating-ui/dom": "^1.7.5",
     "@preline/tooltip": "^4.0.0",
-    "@tailwindcss/vite": "^4.1.18",
+    "@tailwindcss/vite": "^4.2.0",
     "astro": "^5.17.2",
     "preline": "^4.0.1",
     "sharp": "^0.34.5",
