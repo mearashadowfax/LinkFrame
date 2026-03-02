@@ -13,7 +13,7 @@
     "@astrojs/check": "^0.9.6",
     "@astrojs/sitemap": "^3.7.0",
     "@floating-ui/dom": "^1.7.5",
-    "@preline/tooltip": "^4.0.0",
+    "@preline/tooltip": "^4.1.2",
     "@tailwindcss/vite": "^4.2.0",
     "astro": "^5.17.3",
     "preline": "^4.0.1",
