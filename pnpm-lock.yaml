@@ -27,8 +27,8 @@ importers:
         specifier: ^5.18.0
         version: 5.18.0(@types/node@25.0.6)(jiti@2.6.1)(lightningcss@1.31.1)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.2)
       preline:
-        specifier: ^4.0.1
-        version: 4.0.1
+        specifier: ^4.1.2
+        version: 4.1.2
       sharp:
         specifier: ^0.34.5
         version: 0.34.5
@@ -1784,8 +1784,8 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
-  preline@4.0.1:
-    resolution: {integrity: sha512-/cyb8orusmZSymGDkCCmDvbfccK5n3fnRZ3uG59pKihxpagmJ6p1rwkXpX1uZ7VpEQrug7U8IYBJnFGaD+8Bdw==}
+  preline@4.1.2:
+    resolution: {integrity: sha512-uKK0etQ8sLyLqXH4aTmaJMm9l4nbjkmTxpXo7poQ8XuQ1zTlWi12Cmr2OkUPfYEku2+5b9YGhosGikEGF0tSeQ==}
     hasBin: true
 
   prettier-plugin-tailwindcss@0.7.2:
@@ -2021,9 +2021,6 @@ packages:
     resolution: {integrity: sha512-VvrHQ+9uniE+Mvx3+C9IEe/lWasXCU0nXMY2kZeLrHNICuRiC8uMPyM14UEaMOFA5mhyQqEkB02VoQ16n3DLaw==}
     engines: {node: '>=16'}
     hasBin: true
-
-  tailwindcss@4.2.0:
-    resolution: {integrity: sha512-yYzTZ4++b7fNYxFfpnberEEKu43w44aqDMNM9MHMmcKuCH7lL8jJ4yJ7LGHv7rSwiqM0nkiobF9I6cLlpS2P7Q==}
 
   tailwindcss@4.2.1:
     resolution: {integrity: sha512-/tBrSQ36vCleJkAOsy9kbNTgaxvGbyOamC30PRePTQe/o1MFwEKHQk4Cn7BNGaPtjp+PuUrByJehM1hgxfq4sw==}
@@ -4257,7 +4254,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  preline@4.0.1:
+  preline@4.1.2:
     dependencies:
       '@floating-ui/dom': 1.7.5
       '@types/culori': 4.0.1
@@ -4544,8 +4541,6 @@ snapshots:
       csso: 5.0.5
       picocolors: 1.1.1
       sax: 1.5.0
-
-  tailwindcss@4.2.0: {}
 
   tailwindcss@4.2.1: {}
 
