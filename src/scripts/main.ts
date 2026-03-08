@@ -1,4 +1,4 @@
-import "@preline/tooltip/index.js";
+import HSTooltip from "@preline/tooltip/index.js";
 
 // Utility function for safe DOM element selection
 function safeGetElement<T extends HTMLElement>(
@@ -169,6 +169,20 @@ let currentCanvasBackgroundColor = getRandomColor();
 
 // Create a debounced version of redrawCanvas
 const debouncedRedraw = debounce(redrawCanvas, 50);
+
+// Typed store for canvas drag handlers (cleanup on reset)
+interface CanvasEventHandlers {
+  handleMouseDown: (e: MouseEvent) => void;
+  handleMouseMove: (e: MouseEvent) => void;
+  handleMouseUp: () => void;
+  handleTouchStart: (e: TouchEvent) => void;
+  handleTouchMove: (e: TouchEvent) => void;
+  handleTouchEnd: () => void;
+}
+const canvasEventHandlers = new WeakMap<
+  HTMLCanvasElement,
+  CanvasEventHandlers
+>();
 
 // Event handling functions
 function handleBrowseClick() {
@@ -494,14 +508,14 @@ function enableDragging(canvas: HTMLCanvasElement) {
   canvas.addEventListener("touchcancel", handleTouchEnd);
 
   // Store handlers for cleanup
-  (canvas as any)._eventHandlers = {
+  canvasEventHandlers.set(canvas, {
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
     handleTouchStart,
     handleTouchMove,
     handleTouchEnd,
-  };
+  });
 }
 
 function startDragging(x: number, y: number) {
@@ -653,8 +667,8 @@ function resetUploadState() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Clean up event listeners
-    const handlers = (canvas as any)._eventHandlers || {};
-    if (handlers.handleMouseDown) {
+    const handlers = canvasEventHandlers.get(canvas);
+    if (handlers) {
       canvas.removeEventListener("mousedown", handlers.handleMouseDown);
       canvas.removeEventListener("mousemove", handlers.handleMouseMove);
       canvas.removeEventListener("mouseup", handlers.handleMouseUp);
@@ -663,6 +677,7 @@ function resetUploadState() {
       canvas.removeEventListener("touchmove", handlers.handleTouchMove);
       canvas.removeEventListener("touchend", handlers.handleTouchEnd);
       canvas.removeEventListener("touchcancel", handlers.handleTouchEnd);
+      canvasEventHandlers.delete(canvas);
     }
 
     // Remove the canvas element
@@ -684,6 +699,16 @@ interface ColorSection {
   isForFrame: boolean;
   isForText: boolean;
 }
+
+interface SectionEventHandlers {
+  handleRandomClick: () => void;
+  handleHexInput: (e: Event) => void;
+  handleColorPicker: (e: Event) => void;
+}
+const sectionEventHandlers = new WeakMap<
+  ColorSection,
+  SectionEventHandlers
+>();
 
 function getRandomColor(): string {
   const letters = "0123456789ABCDEF";
@@ -740,11 +765,11 @@ function attachEventListenersToSection(section: ColorSection) {
   section.colorPicker.addEventListener("input", handleColorPicker);
 
   // Store the handlers for cleanup
-  (section as any)._eventHandlers = {
+  sectionEventHandlers.set(section, {
     handleRandomClick,
     handleHexInput,
     handleColorPicker,
-  };
+  });
 }
 
 // Letter spacing and font size controls
@@ -1057,6 +1082,9 @@ function initApp() {
     window.onscroll = scrollFunction;
     btnToTop.addEventListener("click", topFunction);
   }
+
+  // Initialize Preline tooltips
+  HSTooltip.autoInit();
 }
 
 // Initialize the application when the DOM is loaded
@@ -1152,25 +1180,6 @@ function sanitizeTextInput(input: string): string {
     .toUpperCase();
 }
 
-// Error boundary wrapper for critical functions
-function withErrorBoundary<T extends (...args: any[]) => any>(
-  fn: T,
-  fallback?: () => void,
-  errorMessage?: string
-): T {
-  return ((...args: Parameters<T>) => {
-    try {
-      return fn(...args);
-    } catch (error) {
-      console.error(errorMessage || `Error in ${fn.name}:`, error);
-      if (fallback) {
-        fallback();
-      }
-      return undefined;
-    }
-  }) as T;
-}
-
 // Enhanced color management with validation
 function setColorWithValidation(section: ColorSection, color: string) {
   if (!validateHexColor(color)) {
@@ -1199,139 +1208,3 @@ function handleTextInputWithValidation(input: HTMLInputElement) {
   redrawCanvas();
 }
 
-// Loading state management
-function showLoadingState(message: string = "Processing...") {
-  if (progress) {
-    progress.classList.add("flex");
-    progress.classList.remove("hidden");
-
-    // Add loading message if element exists
-    const loadingText = progress.querySelector(".loading-text");
-    if (loadingText) {
-      loadingText.textContent = message;
-    }
-  }
-}
-
-function hideLoadingState() {
-  if (progress) {
-    progress.classList.add("hidden");
-    progress.classList.remove("flex");
-  }
-}
-
-// Enhanced file upload with better error handling and loading states
-const enhancedHandleFileUpload = withErrorBoundary(
-  function (event: Event) {
-    const input = event.target as HTMLInputElement;
-    const files = input.files;
-
-    if (!files || files.length === 0) {
-      return;
-    }
-
-    const file = files[0];
-
-    // Enhanced file validation
-    if (!file.type.startsWith("image/")) {
-      alert("Please upload a valid image file (JPG, PNG, GIF, etc.).");
-      return;
-    }
-
-    // Check file size (limit to 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      alert("File size too large. Please upload an image smaller than 10MB.");
-      return;
-    }
-
-    if (!progress || !uploadInterface || !controls || !imagePreview) {
-      console.error("Required DOM elements not found");
-      return;
-    }
-
-    showLoadingState("Uploading image...");
-    uploadInterface.classList.add("hidden");
-    controls.classList.add("hidden");
-
-    if (!canvas) {
-      canvas = document.createElement("canvas");
-      canvas.id = "canvas";
-      canvas.className = "border border-slate-300";
-      imagePreview.appendChild(canvas);
-      ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-      enableDragging(canvas);
-    }
-
-    displayImagePreview(file);
-    if (imageUpload) {
-      imageUpload.value = "";
-    }
-  },
-  () => {
-    hideLoadingState();
-    alert("An error occurred while uploading the image. Please try again.");
-  },
-  "Enhanced file upload error"
-);
-
-// Enhanced image preview with loading states
-const enhancedDisplayImagePreview = withErrorBoundary(
-  function (file: File) {
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      const result = e.target?.result;
-      if (typeof result !== "string") return;
-
-      showLoadingState("Processing image...");
-
-      image = new Image();
-      image.onload = () => {
-        if (!canvas) return;
-
-        canvas.width = 400;
-        canvas.height = 400;
-
-        redrawCanvas();
-
-        hideLoadingState();
-
-        if (imagePreview) {
-          imagePreview.classList.remove("hidden");
-        }
-        if (uploadInterface) {
-          uploadInterface.classList.add("hidden");
-        }
-        if (container) {
-          container.classList.remove("border-dashed");
-          container.classList.add("border-solid");
-        }
-        if (controls) {
-          controls.classList.remove("hidden");
-          controls.classList.add("flex");
-        }
-      };
-
-      image.onerror = () => {
-        hideLoadingState();
-        alert("Failed to load image. Please try another file.");
-        resetUploadState();
-      };
-
-      image.src = result;
-    };
-
-    reader.onerror = () => {
-      hideLoadingState();
-      alert("Error reading file. Please try again.");
-      resetUploadState();
-    };
-
-    reader.readAsDataURL(file);
-  },
-  () => {
-    hideLoadingState();
-    alert("An error occurred while processing the image. Please try again.");
-  },
-  "Enhanced image preview error"
-);
