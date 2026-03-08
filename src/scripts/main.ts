@@ -556,7 +556,7 @@ function setupSliderAndInput(
     const value = parseFloat(slider.value);
     input.value = value.toString();
     updateFn(value);
-    debouncedRedraw();
+    redrawCanvas();
   }
 
   function handleInputChange() {
