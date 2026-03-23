@@ -18,8 +18,8 @@ importers:
         specifier: ^1.7.6
         version: 1.7.6
       '@preline/tooltip':
-        specifier: ^4.1.2
-        version: 4.1.2
+        specifier: ^4.1.3
+        version: 4.1.3
       '@tailwindcss/vite':
         specifier: ^4.2.1
         version: 4.2.1(vite@7.3.1(@types/node@25.0.6)(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.8.2))
@@ -470,8 +470,8 @@ packages:
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
 
-  '@preline/tooltip@4.1.2':
-    resolution: {integrity: sha512-ZVO+P/txSZdRT7RMiz9NR7LP9xUZr7jXE1rhHkBKupuFcWZfAdvox0+vKuF3D1xWoj5t9c/FX6UYvEO5r/GMsQ==}
+  '@preline/tooltip@4.1.3':
+    resolution: {integrity: sha512-O0gxw205Au9Sng2g0zJ17V9GicAyr4Fe8keF7pr+M+f+s6J/mfDtCFO6QEX7j4OomfhJJ2SEZ612AsJ5rA2Mpg==}
 
   '@rollup/pluginutils@5.3.0':
     resolution: {integrity: sha512-5EdhGZtnu3V88ces7s53hhfK5KSASnJZv8Lulpc04cWO3REESroJXg73DFsOmgbU2BhwV0E20bu2IDZb3VKW4Q==}
@@ -2469,7 +2469,7 @@ snapshots:
 
   '@oslojs/encoding@1.1.0': {}
 
-  '@preline/tooltip@4.1.2':
+  '@preline/tooltip@4.1.3':
     dependencies:
       '@floating-ui/dom': 1.7.6
 
