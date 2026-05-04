@@ -46,8 +46,8 @@ importers:
         specifier: ^0.5.11
         version: 0.5.11(tailwindcss@4.2.4)
       prettier-plugin-tailwindcss:
-        specifier: ^0.7.3
-        version: 0.7.3(prettier@3.8.1)
+        specifier: ^0.8.0
+        version: 0.8.0(prettier@3.8.1)
 
 packages:
 
@@ -1551,8 +1551,8 @@ packages:
     resolution: {integrity: sha512-M2Rg4J7mZqINfVX0RlWAG1zT+hhUE66PmLoRrq6xIumhID3vONBvbAIYixdTYVsNdv4UWeyr2jatWlJl23q05Q==}
     hasBin: true
 
-  prettier-plugin-tailwindcss@0.7.3:
-    resolution: {integrity: sha512-lckXaWWdo2ZVXoMoUO3WIBiz9hVY+YBEh1gYyMFfrWP9WZW/wpFXQKizHx7WrFQFMkcG0bGShdpp531X1n+qpg==}
+  prettier-plugin-tailwindcss@0.8.0:
+    resolution: {integrity: sha512-V8ITGH87yuBDF6JpEZTOVlUz/saAwqb8f3HRgUj8Lh+tGCcrmorhsLpYqzygwFwK0PE2Ib6Mv3M7T/uE2tZV1g==}
     engines: {node: '>=20.19'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
@@ -3798,7 +3798,7 @@ snapshots:
       nouislider: 15.8.1
       vanilla-calendar-pro: 3.1.0
 
-  prettier-plugin-tailwindcss@0.7.3(prettier@3.8.1):
+  prettier-plugin-tailwindcss@0.8.0(prettier@3.8.1):
     dependencies:
       prettier: 3.8.1
 
