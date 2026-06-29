@@ -15,7 +15,7 @@
     "@floating-ui/dom": "^1.7.6",
     "@preline/tooltip": "^4.2.0",
     "@tailwindcss/vite": "^4.3.1",
-    "astro": "^6.4.8",
+    "astro": "^7.0.3",
     "preline": "^4.2.0",
     "sharp": "^0.35.2",
     "sharp-ico": "^0.1.5",
