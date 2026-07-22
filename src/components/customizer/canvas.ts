@@ -6,20 +6,6 @@ import {
 const DESIGN_SIZE = 400;
 const DESIGN_SCALE = CANVAS_SIZE / DESIGN_SIZE;
 
-function hexToRgba(hex: string, alpha: number): string {
-  const value = hex.replace("#", "");
-  const normalized =
-    value.length === 3
-      ? value
-          .split("")
-          .map((character) => character.repeat(2))
-          .join("")
-      : value;
-  const color = Number.parseInt(normalized, 16);
-
-  return `rgba(${(color >> 16) & 255}, ${(color >> 8) & 255}, ${color & 255}, ${alpha})`;
-}
-
 function drawImage(
   context: CanvasRenderingContext2D,
   image: HTMLImageElement,
@@ -42,6 +28,20 @@ function drawImage(
   context.restore();
 }
 
+function hexToRgba(hex: string, alpha: number): string {
+  const value = hex.replace("#", "");
+  const normalized =
+    value.length === 3
+      ? value
+          .split("")
+          .map((character) => character.repeat(2))
+          .join("")
+      : value;
+  const color = Number.parseInt(normalized, 16);
+
+  return `rgba(${(color >> 16) & 255}, ${(color >> 8) & 255}, ${color & 255}, ${Math.min(1, Math.max(0, alpha))})`;
+}
+
 function drawFrame(
   context: CanvasRenderingContext2D,
   settings: EditorSettings,
@@ -55,21 +55,19 @@ function drawFrame(
   }
 
   const totalAngle = endAngle - startAngle;
+  if (totalAngle <= 0) return;
+
   const radius = CANVAS_SIZE / 2 - lineWidth / 2;
   const steps = 250;
 
   context.lineWidth = lineWidth;
-  context.lineCap = "round";
+  context.lineCap = "butt";
 
-  for (let index = 0; index < steps; index += 1) {
+  for (let index = 0; index <= steps; index += 1) {
     const progress = index / steps;
-    const nextProgress = (index + 1) / steps;
-    const opacity =
-      progress < 0.2
-        ? Math.min(1, progress * 5)
-        : progress > 0.8
-          ? Math.min(1, (1 - progress) * 5)
-          : 1;
+    let opacity = 1;
+    if (progress < 0.2) opacity = progress * 7;
+    else if (progress > 0.7) opacity = (1 - progress) * 7;
 
     context.beginPath();
     context.arc(
@@ -77,7 +75,7 @@ function drawFrame(
       CANVAS_SIZE / 2,
       radius,
       startAngle + progress * totalAngle,
-      startAngle + nextProgress * totalAngle,
+      startAngle + (progress + 1 / steps) * totalAngle,
     );
     context.strokeStyle = hexToRgba(settings.frameColor, opacity);
     context.stroke();
