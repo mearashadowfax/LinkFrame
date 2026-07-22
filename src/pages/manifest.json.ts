@@ -39,8 +39,8 @@ export const GET: APIRoute = async () => {
           type: `image/${image.options.format}`,
           purpose: favicon.purpose,
         };
-      })
-    )
+      }),
+    ),
   );
 
   const manifest = {

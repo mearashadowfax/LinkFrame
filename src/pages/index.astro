@@ -2,10 +2,10 @@
 import Meta from "@common/Meta.astro";
 import Hero from "@common/Hero.astro";
 import ImageCustomizer from "@common/ImageCustomizer.astro";
-import Icon from "@ui/icons/Icon.astro";
+import Footer from "@common/Footer.astro";
+import { Font } from "astro:assets";
 import { SITE } from "@data/constants";
 import "@styles/global.css";
-import "@styles/styles.css";
 
 const { title = SITE.title, meta, structuredData } = Astro.props;
 
@@ -21,20 +21,21 @@ interface Props {
   <head>
     <Meta meta={meta} structuredData={structuredData} />
     <meta name="generator" content={Astro.generator} />
+    <Font cssVariable="--font-noto-sans" preload />
     <title>{title}</title>
   </head>
-  <body class="antialiased selection:bg-sky-200 selection:text-slate-600">
-    <Hero />
-    <ImageCustomizer />
-    <button
-      id="btnToTop"
-      class="fixed lg:hidden scale-0 opacity-0 bottom-3 left-3 transition-all duration-500 border-none outline-none p-3 rounded-full bg-sky-200 text-white"
-      aria-label="Back to top"
-    >
-      <Icon name="arrowUp" />
-    </button>
-    <script>
-      import "@scripts/main";
-    </script>
+  <body
+    class="min-h-screen overflow-x-hidden bg-background antialiased selection:bg-primary/15 selection:text-foreground"
+  >
+    <main class="relative">
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,transparent_0%,oklch(0.97_0.025_240/.65)_45%,transparent_100%)]"
+      >
+      </div>
+      <Hero />
+      <ImageCustomizer />
+    </main>
+    <Footer />
   </body>
 </html>

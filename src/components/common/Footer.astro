@@ -2,42 +2,69 @@
 import { SITE } from "@data/constants";
 ---
 
-<footer class="pb-10">
-    <div class="w-full max-w-5xl px-4 xl:px-0 py-10 lg:pt-16 mx-auto">
-      <div class="inline-flex items-center">
-
-        <a href="https://www.gulamoff.dev/"
+<footer class="border-t border-border/70 bg-background/70">
+  <div
+    class="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6 lg:px-8"
+  >
+    <div class="inline-flex items-center">
+      <a
+        href="https://www.gulamoff.dev/"
         target="_blank"
-        aria-label="Visit gulamoff"
+        rel="noreferrer"
+        aria-label="Visit gulamoff.dev"
+        class="rounded-lg text-foreground transition-opacity hover:opacity-70 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+      >
+        <svg
+          class="size-7"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 526 526"
+          aria-hidden="true"
         >
-        <svg class="size-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 526 526">
           <g clip-path="url(#a)">
-            <mask id="b" width="454" height="522" x="36" y="2" maskUnits="userSpaceOnUse" style="mask-type:alpha">
-              <path fill="#303841" d="m489.177 133.555-1.271 260.908-226.589 129.353L36 392.261l1.272-260.908L263.86 2l225.317 131.555Z"/>
+            <mask
+              id="b"
+              width="454"
+              height="522"
+              x="36"
+              y="2"
+              maskUnits="userSpaceOnUse"
+              style="mask-type:alpha"
+            >
+              <path
+                fill="currentColor"
+                d="m489.177 133.555-1.271 260.908-226.589 129.353L36 392.261l1.272-260.908L263.86 2l225.317 131.555Z"
+              ></path>
             </mask>
             <g mask="url(#b)">
-              <path fill="#303841" d="M24.792-2.99994h463.177V528.816H24.792V-2.99994ZM594.152 149.36 303.038 595.416l7.49 4.889 291.114-446.057-7.49-4.888ZM432.326 50.8951 148.65 501.718l7.571 4.764L439.897 55.6581l-7.571-4.763Zm-235.882-62.296 292.63 445.0629 7.474-4.914-292.63-445.0629-7.474 4.914ZM10 144.126l367.48 385.58 6.476-6.171-367.48-385.58L10 144.126ZM306.395-2.29394 72.304 476.158l8.034 3.93L314.428 1.63806l-8.033-3.932Z"/>
+              <path
+                fill="currentColor"
+                d="M24.792-2.99994h463.177V528.816H24.792V-2.99994ZM594.152 149.36 303.038 595.416l7.49 4.889 291.114-446.057-7.49-4.888ZM432.326 50.8951 148.65 501.718l7.571 4.764L439.897 55.6581l-7.571-4.763Zm-235.882-62.296 292.63 445.0629 7.474-4.914-292.63-445.0629-7.474 4.914ZM10 144.126l367.48 385.58 6.476-6.171-367.48-385.58L10 144.126ZM306.395-2.29394 72.304 476.158l8.034 3.93L314.428 1.63806l-8.033-3.932Z"
+              ></path>
             </g>
           </g>
           <defs>
             <clipPath id="a">
-              <path fill="#fff" d="M36 2h454v522H36z"/>
+              <path fill="#fff" d="M36 2h454v522H36z"></path>
             </clipPath>
           </defs>
         </svg>
-      
-          </a>
-        <div class="border-s border-slate-500 ps-5 ms-5">
-          <p class="text-sm text-slate-400">
-            ©  <span id="current-year"></span> {SITE.title}
-          </p>
-        </div>
-      </div>
+      </a>
+      <p class="ml-4 border-l border-border pl-4 text-sm text-muted-foreground">
+        © <span id="current-year"></span>
+        {` `}
+        {SITE.title}
+      </p>
+    </div>
+
+    <p class="text-sm text-muted-foreground">
+      Your images never leave your device.
+    </p>
   </div>
 </footer>
 
 <script>
   const year = new Date().getFullYear();
   const element = document.getElementById("current-year");
-  element!.innerText = year.toString();
+  if (element) element.innerText = year.toString();
 </script>

@@ -27,7 +27,6 @@ const socialImageRes = await getImage({
 });
 const socialImage = Astro.url.origin + socialImageRes.src;
 
-
 // Generate and optimize the favicon images
 const faviconSvg = await getImage({
   src: faviconSvgSrc,
@@ -41,11 +40,13 @@ const appleTouchIcon = await getImage({
   format: "png",
 });
 ---
-<meta charset="UTF-8">
+
+<meta charset="UTF-8" />
 {
   structuredData && (
     <script
       type="application/ld+json"
+      is:inline
       set:html={JSON.stringify(structuredData)}
     />
   )
