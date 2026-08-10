@@ -16,7 +16,7 @@
     "@astrojs/check": "^0.9.10",
     "@astrojs/react": "^6.0.2",
     "@astrojs/sitemap": "^3.7.3",
-    "@base-ui/react": "^1.6.0",
+    "@base-ui/react": "^1.7.0",
     "@fontsource-variable/geist": "^5.3.0",
     "@tailwindcss/vite": "^4.3.3",
     "@toolwind/corner-shape": "0.0.8-3",
