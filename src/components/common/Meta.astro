@@ -42,15 +42,13 @@ const appleTouchIcon = await getImage({
 ---
 
 <meta charset="UTF-8" />
-{
-  structuredData && (
-    <script
-      type="application/ld+json"
-      is:inline
-      set:html={JSON.stringify(structuredData)}
-    />
-  )
-}
+{structuredData && (
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(structuredData)}
+  ></script>
+)}
 <meta content={meta} name="description" />
 <meta name="web_author" content={author} />
 <meta

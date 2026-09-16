@@ -24,15 +24,12 @@ interface Props {
     <Font cssVariable="--font-noto-sans" preload />
     <title>{title}</title>
   </head>
-  <body
-    class="min-h-screen overflow-x-hidden bg-background antialiased selection:bg-primary/15 selection:text-foreground"
-  >
+  <body class="min-h-screen overflow-x-hidden bg-background antialiased selection:bg-primary/15 selection:text-foreground">
     <main class="relative">
       <div
         aria-hidden="true"
         class="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,transparent_0%,oklch(0.97_0.025_240/.65)_45%,transparent_100%)]"
-      >
-      </div>
+      ></div>
       <Hero />
       <ImageCustomizer />
     </main>
